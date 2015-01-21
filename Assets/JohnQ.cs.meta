@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: c7dd50dcb53f0994a9ae1f8d3e85a2ee
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - frisbee: {instanceID: 0}
+  - powerBar: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
