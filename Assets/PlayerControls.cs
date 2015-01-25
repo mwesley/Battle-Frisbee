@@ -17,7 +17,7 @@ public class PlayerControls : MonoBehaviour
     protected bool aimLock = false;
     protected bool charging;
     protected bool dashing;
-    public static bool sineing;
+    public static bool special;
 
     public bool isThrown = false;
 
@@ -26,8 +26,10 @@ public class PlayerControls : MonoBehaviour
     public static float t = 0f;
 
     protected float chargeSpeed = 25;
-    protected float powerValue = 100;
-    protected float timer = 0;
+    protected float powerValue = 50;
+    protected float dashTimer = 0;
+    protected float throwTimer = 0;
+    protected float dashCooldown = 0;
     protected float z;
 
     public GUITexture powerBar;
@@ -57,12 +59,11 @@ public class PlayerControls : MonoBehaviour
 
     protected KeyCombo upCurve = new KeyCombo(new string[] { "down", "right", "Fire1" });
     protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "right", "Fire1" });
-
-    protected KeyCombo sinWave = new KeyCombo(new string[] { "Fire2", "Fire2" });
-
+    protected KeyCombo specialAbility = new KeyCombo(new string[] { "Fire2", "Fire2" });
 
 
-    void Awake()
+
+    void Start()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
@@ -132,6 +133,7 @@ public class PlayerControls : MonoBehaviour
                 curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, 7), new Vector2(-10, 7), hitVec);
                 transform.DetachChildren();
                 Frisbee.caught = false;
+                isThrown = true;
             }
             else if (downCurve.Check())
             {
@@ -141,31 +143,34 @@ public class PlayerControls : MonoBehaviour
                 curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, -7), new Vector2(-10, -7), hitVec);
                 transform.DetachChildren();
                 Frisbee.caught = false;
+                isThrown = true;
             }
-            else if (sinWave.Check())
+            else if (specialAbility.Check())
             {
-                sineing = true;
+                special = true;
                 Frisbee.caught = false;
+                isThrown = true;
             } 
             else if (Input.GetButtonDown("Fire1"))
             {
                 transform.DetachChildren();
                 frisbee.rigidbody2D.AddForce(-transform.up * 10);
                 Frisbee.caught = false;
+                isThrown = true;
             }
-            isThrown = true;
+            
 
         }
 
         if (isThrown == true)
         {
-            timer += Time.deltaTime;
+            throwTimer += Time.deltaTime;
             //Debug.Log(timer);
-            if (timer > 1)
+            if (throwTimer > 1)
             {
                 isThrown = false;
                 gameObject.collider2D.enabled = true;
-                timer = 0;
+                throwTimer = 0;
             }
         }
     }
@@ -205,8 +210,6 @@ public class PlayerControls : MonoBehaviour
         {
             if (Input.GetKeyDown(dash) && !justDashed)
             {
-                
-                Debug.Log("Gotta go fast");
                 dashing = true;
             }
         }
@@ -219,24 +222,24 @@ public class PlayerControls : MonoBehaviour
             float y = dashDistance * Mathf.Cos(theta);
             Vector3 directionVector = new Vector3(x, y, 0);
             directionVector.Normalize();
-            timer += Time.deltaTime;
+            dashTimer += Time.deltaTime;
             transform.position = Vector2.Lerp(transform.position, new Vector2(transform.position.x + directionVector.x, transform.position.y - directionVector.y), dashSpeed * Time.deltaTime);
             Debug.Log(directionVector);
-            if (timer >= dashTime)
+            if (dashTimer >= dashTime)
             {
-                timer = 0;
+                dashTimer = 0;
                 dashing = false;
                 justDashed = true;
             }
         }
         if (justDashed)
         {
-            timer += Time.deltaTime;
+            dashCooldown += Time.deltaTime;
             rigidbody2D.velocity = Vector2.zero;
-            if (timer >= 0.5f)
+            if (dashCooldown >= 0.5f)
             {
                 justDashed = false;
-                timer = 0f;
+                dashCooldown = 0f;
             }
         }
     }
@@ -245,18 +248,6 @@ public class PlayerControls : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Time.timeScale = 0.5f;
-
         pos = new Vector2(transform.position.x, transform.position.y);
-
-        /*if (sineing)
-        {
-            Debug.Log("Sin Wave!");
-            transform.DetachChildren();
-            Vector2 frisbeeVelocity = new Vector2(15f, 50 * Mathf.Sin(Time.time * 10));
-            frisbee.rigidbody2D.velocity = frisbeeVelocity;
-        }*/
-
-        
     }
 }

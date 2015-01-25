@@ -163,7 +163,7 @@ public class AI : MonoBehaviour {
                     float y = 2.5f * Mathf.Cos(theta);
                     Vector2 directionVector = new Vector2(x, y);
                     directionVector.Normalize();
-                    AIChar.transform.position = Vector2.Lerp(AIChar.transform.position, new Vector2(AIChar.transform.position.x + directionVector.x, AIChar.transform.position.y - directionVector.y), 10 * Time.deltaTime);
+                    AIChar.transform.position = Vector2.Lerp(AIChar.transform.position, new Vector2(AIChar.transform.position.x + directionVector.x, AIChar.transform.position.y - directionVector.y), 20 * Time.deltaTime);
                     
 
                     if (dashTimer > 0.5f)

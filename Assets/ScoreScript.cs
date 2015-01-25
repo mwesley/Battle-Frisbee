@@ -29,7 +29,7 @@ public class ScoreScript : MonoBehaviour
     public Transform canvas;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         frisbee = GameObject.FindWithTag("frisbee");
         p1RoundScore.text = "Score: 0";

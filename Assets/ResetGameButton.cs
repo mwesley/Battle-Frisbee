@@ -5,6 +5,7 @@ public class ResetGameButton : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        //Screen.lockCursor = true;
 	
 	}
 	

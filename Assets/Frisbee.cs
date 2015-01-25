@@ -23,7 +23,7 @@ public class Frisbee : MonoBehaviour
     private Vector2 frisbeeVelocity;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         frisbeeVelocity = new Vector2(-5.0f, 0f);
         rigidbody2D.AddForce(frisbeeVelocity);
@@ -48,15 +48,11 @@ public class Frisbee : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        
-
         if (ScoreScript.reset == true)
         {
             timer += Time.deltaTime;
             if (timer >= 2f)
             {
-                Debug.Log("Hello");
                 frisbee.rigidbody2D.AddForce(frisbeeVelocity);
                 ScoreScript.reset = false;
                 timer = 0f;
@@ -82,72 +78,45 @@ public class Frisbee : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-
-        PlayerControls.sineing = false;
-        PlayerControls.bezierFlight = false;
-        AI.bezierFlight = false;
-        AI.dashing = false;
-
         if (col.gameObject.name == "Player")
         {
-            Debug.Log("Collided!");
             frisbeeTransform.parent = playerTransform;
             caught = true;
             frisbeeTransform.localPosition = new Vector2(0.05f, -0.33f);
             rigidbody2D.velocity = new Vector2(0, 0);
-
-            JohnQ.sineing = false;
-            PlayerControls.bezierFlight = false;
-            AI.bezierFlight = false;
         }
 
         if (col.gameObject.tag == "AI")
         {
-            Debug.Log("AI caught");
             AI.frisbeeCaught = true;
-
-            PlayerControls.sineing = false;
-            PlayerControls.bezierFlight = false;
-
         }
 
-        if (PlayerControls.bezierFlight)
+        if (PlayerControls.bezierFlight || AI.bezierFlight || PlayerControls.special)
         {
-            if (col.gameObject.tag == "Wall")
+            if (col.gameObject.tag == "Wall" && !SidleAlongWall.sidle)
             {
-                ContactPoint2D contact = col.contacts[0];
-                Vector2 pointOfContact = contact.point;
-                if (pointOfContact.x < 0)
-                {
-                    pointOfContact.x = pointOfContact.x * -1;
-                }
-                Debug.Log("Bezier collision!");
-                frisbeeTransform.rigidbody2D.AddForce(pointOfContact);
-                PlayerControls.bezierFlight = false;
+                rigidbody2D.velocity = -transform.position.normalized * 15;
+            }
+            else if (col.gameObject.tag == "Wall" && SidleAlongWall.sidle)
+            {
+                rigidbody2D.velocity = new Vector2(20, 0);
+                PlayerControls.special = false;
             }
         }
 
         if (col.gameObject.tag == "ScoreWallP1")
         {
-            AI.bezierFlight = false;
-            PlayerControls.bezierFlight = false;
-            PlayerControls.sineing = false;
             ScoreScript.resetting = true;
             ScoreScript.playerTwoRoundScore++;
             ScoreScript.p2RoundScore.text = "Score: " + ScoreScript.playerTwoRoundScore;
-            Debug.Log("Left");
             
         }
 
         if (col.gameObject.tag == "ScoreWallP2")
         {
-            AI.bezierFlight = false;
-            PlayerControls.bezierFlight = false;
-            PlayerControls.sineing = false;
             ScoreScript.resetting = true;
             ScoreScript.playerOneRoundScore++;
             ScoreScript.p1RoundScore.text = "Score: " + ScoreScript.playerOneRoundScore;
-            Debug.Log("Right");
         }
 
         if (ScoreScript.playerOneRoundScore == 5)
@@ -164,21 +133,10 @@ public class Frisbee : MonoBehaviour
             playerTwoWin = true;
         }
 
-        if (PlayerControls.sineing)
-        {
-            if (col.gameObject.tag == "Wall")
-            {
-                ContactPoint2D contact = col.contacts[0];
-                Vector2 pointOfContact = contact.point;
-                if (pointOfContact.x < 0)
-                {
-                    pointOfContact.x = pointOfContact.x * -1;
-                }
-                Debug.Log("Sin collision!");
-                frisbeeTransform.rigidbody2D.AddForce(pointOfContact);
-                PlayerControls.sineing = false;
-            }
-        }
+        PlayerControls.special = false;
+        PlayerControls.bezierFlight = false;
+        AI.bezierFlight = false;
+        AI.dashing = false;
     }
 
 
