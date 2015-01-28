@@ -1,25 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerControls : MonoBehaviour
+public class MultiplayerPlayerOne : MonoBehaviour
 {
     // up and down keys (to be set in the Inspector)
 
-    protected GameObject frisbee;
+    public GameObject frisbee;
 
     protected bool aimLock = false;
     protected bool charging;
     protected bool dashing;
-    public static bool special;
+    public  bool special;
 
     public bool isThrown = false;
 
-    public static bool bezierFlight;
+    public bool bezierFlight;
 
-    public static float t = 0f;
+    public float t = 0f;
 
     protected float chargeSpeed = 25;
-    public static float powerValue = 50f;
+    public float powerValue = 50f;
     protected float dashTimer = 0;
     protected float throwTimer = 0;
     protected float dashCooldown = 0;
@@ -50,11 +50,11 @@ public class PlayerControls : MonoBehaviour
 
     protected Vector2 playerDirection;
 
-    protected KeyCombo upCurve = new KeyCombo(new string[] {"down", "right","Throw"});
-    protected KeyCombo downCurve = new KeyCombo(new string[] {"up", "right","Throw"});
-    protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special"});
+    public MPFrisbee _FrisbeeScript;
 
-    public Frisbee _FrisbeeScript;
+    protected KeyCombo upCurve = new KeyCombo(new string[] { "down", "right", "Throw" });
+    protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "right", "Throw" });
+    protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
 
     void Start()
     {
@@ -63,11 +63,6 @@ public class PlayerControls : MonoBehaviour
         centerMaskValue = LayerMask.GetMask("CenterWall");
         justDashed = false;
         powerValue = 50f;
-        frisbee = GameObject.FindWithTag("frisbee");
-
-       
-
-        
     }
 
     protected void BezierMovement()
@@ -87,9 +82,6 @@ public class PlayerControls : MonoBehaviour
 
             }
         }
-
-
-
         if (bezierFlight == false)
             t = 0f;
     }
@@ -109,7 +101,7 @@ public class PlayerControls : MonoBehaviour
     protected void Throw()
     {
 
-        if (_FrisbeeScript.caught == true)
+        if (_FrisbeeScript.PlayerOneCaught == true)
         {
 
             hit = Physics2D.Raycast(frisbee.transform.position, playerDirection);
@@ -178,7 +170,7 @@ public class PlayerControls : MonoBehaviour
         playerDirection = new Vector2(Input.GetAxis("Horizontal 1"), Input.GetAxis("Vertical 1"));
         if (!dashing && !justDashed)
         {
-            if (_FrisbeeScript.caught == false)
+            if (_FrisbeeScript.PlayerOneCaught == false)
             {
                 rigidbody2D.velocity = new Vector2(Input.GetAxis("Horizontal 1") * maxMovementSpeed, Input.GetAxis("Vertical 1") * maxMovementSpeed);
                 float x = Input.GetAxis("Horizontal 1");
@@ -189,7 +181,7 @@ public class PlayerControls : MonoBehaviour
 
             }
         }
-        if (_FrisbeeScript.caught)
+        if (_FrisbeeScript.PlayerOneCaught)
         {
             float x = Input.GetAxis("Horizontal 1");
             float y = Input.GetAxis("Vertical 1");
@@ -239,7 +231,7 @@ public class PlayerControls : MonoBehaviour
             }
         }
     }
-        
+
     void FixedUpdate()
     {
         pos = new Vector2(transform.position.x, transform.position.y);

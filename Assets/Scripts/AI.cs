@@ -33,7 +33,7 @@ public class AI : MonoBehaviour
     private float theta;
     private bool justDashed;
     private float dashCooldown;
-    private Frisbee _frisbeeScript;
+    public Frisbee _frisbeeScript;
 
     void Start()
     {
