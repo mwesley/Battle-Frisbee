@@ -4,7 +4,6 @@ using System.Collections;
 public class SinWave : PlayerControls
 {
 
-    private float speed;
     private float _y;
     private float _time;
     private AudioClip specialSound;
@@ -13,7 +12,6 @@ public class SinWave : PlayerControls
     // Use this for initialization
     void Start()
     {
-        speed = 1;
         _time = 0f;
         frisbee = GameObject.FindWithTag("frisbee");
         powerBar = GameObject.FindWithTag("PowerBar");
@@ -38,7 +36,6 @@ public class SinWave : PlayerControls
         }
         if (!special)
         {
-            speed = 1f;
             _time = 0f;
             Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D, false);
         }
