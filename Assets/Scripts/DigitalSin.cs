@@ -14,12 +14,16 @@ public class DigitalSin : PlayerControls
         _time = 0f;
         frisbee = GameObject.FindWithTag("frisbee");
         powerBar = GameObject.FindWithTag("PowerBar");
+
     }
 
     private void DigitalSinWave()
     {
         _y = ((15 * Mathf.Round(Mathf.Cos((_time * 10) / 2))));
         _x = ((powerValue / 2.5f * Mathf.Ceil(Mathf.Cos((_time * 10) + 3))));
+
+        if (this.tag == "PlayerTwo")
+            _x = -_x;
 
         if (special)
         {
@@ -40,10 +44,14 @@ public class DigitalSin : PlayerControls
     void Update()
     {
         DigitalSinWave();
-        Movement();
         Throw();
         PowerBar();
         BezierMovement();
         Dash();
+        Movement();
+
+
+
+        
     }
 }

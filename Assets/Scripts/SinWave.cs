@@ -5,6 +5,7 @@ public class SinWave : PlayerControls
 {
 
     private float _y;
+    private float _x;
     private float _time;
     private AudioClip specialSound;
     private AudioSource specialSoundSource;
@@ -24,12 +25,16 @@ public class SinWave : PlayerControls
     {
 
         _y = (30 * Mathf.Cos(_time * 10));
+        _x = powerValue / 5;
+
+        if (this.tag == "PlayerTwo")
+            _x = -_x;
 
         if (special)
         {
             specialSoundSource.PlayOneShot(specialSound);
             transform.DetachChildren();
-            Vector2 frisbeeVelocity = new Vector2(powerValue / 5, _y);
+            Vector2 frisbeeVelocity = new Vector2(_x, _y);
             frisbee.rigidbody2D.velocity = frisbeeVelocity;
             _time += Time.deltaTime;
             Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D);
@@ -45,11 +50,13 @@ public class SinWave : PlayerControls
     void Update()
     {
         SinWaveSkill();
-        Movement();
+        
         Throw();
         PowerBar();
         BezierMovement();
         Dash();
+
+        Movement();
 
     }
 

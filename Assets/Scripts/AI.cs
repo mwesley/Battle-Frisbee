@@ -33,6 +33,7 @@ public class AI : MonoBehaviour
     private float theta;
     private bool justDashed;
     private float dashCooldown;
+    private Frisbee _frisbeeScript;
 
     void Start()
     {
@@ -99,7 +100,7 @@ public class AI : MonoBehaviour
 
     protected void BezierMovement()
     {
-        if (Frisbee.caught == false)
+        if (_frisbeeScript.caught == false)
         {
             if (bezierFlight == true)
             {
@@ -242,7 +243,7 @@ public class AI : MonoBehaviour
 
         }
 
-        if (Frisbee.caught)
+        if (_frisbeeScript.caught)
         {
             bezierFlight = false;
         }

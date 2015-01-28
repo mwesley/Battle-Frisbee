@@ -6,6 +6,7 @@ public class SidleAlongWall : PlayerControls
     private float _speed;
     private float _time;
     private float _y;
+    private float _x;
     private bool _upOrDown;
     public static bool sidle;
 
@@ -20,11 +21,16 @@ public class SidleAlongWall : PlayerControls
 
     private void WallSidle()
     {
+        _x = 15;
+
+        if (this.tag == "PlayerTwo")
+            _x = -_x;
+
         if (special)
         {
             sidle = true;
             transform.DetachChildren();
-            Vector2 frisbeeVelocity = new Vector2(15, _y);
+            Vector2 frisbeeVelocity = new Vector2(_x, _y);
             frisbee.rigidbody2D.velocity = frisbeeVelocity;
             Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D);
         }
@@ -38,7 +44,6 @@ public class SidleAlongWall : PlayerControls
     // Update is called once per frame
     void Update()
     {
-        Movement();
         Throw();
         PowerBar();
         BezierMovement();
@@ -60,6 +65,8 @@ public class SidleAlongWall : PlayerControls
         if (!sidle)
             _upOrDown = true;
 
+
+        Movement();
 
     }
 }

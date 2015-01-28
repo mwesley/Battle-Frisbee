@@ -4,6 +4,7 @@ using System.Collections;
 public class CircleSkill : PlayerControls
 {
     private float _speed;
+    private float _x;
 
     // Use this for initialization
     void Start()
@@ -15,6 +16,11 @@ public class CircleSkill : PlayerControls
 
     private void CircleSpecial()
     {
+        _x = 40 * Mathf.Sin(Time.time * 15) + _speed;
+
+        if (this.tag == "PlayerTwo")
+            _x = -_x;
+
         if (special)
         {
             _speed += Time.deltaTime * 10;
@@ -34,11 +40,13 @@ public class CircleSkill : PlayerControls
     // Update is called once per frame
     void Update()
     {
-        Movement();
         Throw();
         PowerBar();
         BezierMovement();
         Dash();
         CircleSpecial();
+        Movement();
+
+
     }
 }

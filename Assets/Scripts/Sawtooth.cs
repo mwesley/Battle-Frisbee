@@ -30,6 +30,10 @@ public class Sawtooth : PlayerControls
         }
         _y = (_yFactor * 10);
         _x = (powerValue / 5f);
+
+        if (this.tag == "PlayerTwo")
+            _x = -_x;
+
         if (special)
         {
             transform.DetachChildren();
@@ -50,10 +54,11 @@ public class Sawtooth : PlayerControls
     void Update()
     {
         SawtoothSkill();
-        Movement();
         Throw();
         PowerBar();
         BezierMovement();
         Dash();
+
+        Movement();
     }
 }

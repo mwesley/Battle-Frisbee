@@ -23,9 +23,13 @@ public class KeyCombo
             {
                 if ((buttons[currentIndex] == "down" && Input.GetAxisRaw("Vertical") == -1) ||
                 (buttons[currentIndex] == "up" && Input.GetAxisRaw("Vertical") == 1) ||
-                (buttons[currentIndex] == "left" && Input.GetAxisRaw("Vertical") == -1) ||
+                (buttons[currentIndex] == "left" && Input.GetAxisRaw("Horizontal") == -1) ||
                 (buttons[currentIndex] == "right" && Input.GetAxisRaw("Horizontal") == 1) ||
-                (buttons[currentIndex] != "down" && buttons[currentIndex] != "up" && buttons[currentIndex] != "left" && buttons[currentIndex] != "right" && Input.GetButtonDown(buttons[currentIndex])))
+                (buttons[currentIndex] == "down 2" && Input.GetAxisRaw("Vertical 2") == -1) ||
+                (buttons[currentIndex] == "up 2" && Input.GetAxisRaw("Vertical 2") == 1) ||
+                (buttons[currentIndex] == "left 2" && Input.GetAxisRaw("Horizontal 2") == -1) ||
+                (buttons[currentIndex] == "right 2" && Input.GetAxisRaw("Horizontal 2") == 1) ||
+                (buttons[currentIndex] != "down" && buttons[currentIndex] != "up" && buttons[currentIndex] != "left" && buttons[currentIndex] != "right" && buttons[currentIndex] != "down 2" && buttons[currentIndex] != "up 2" && buttons[currentIndex] != "left 2" && buttons[currentIndex] != "right 2" && Input.GetButtonDown(buttons[currentIndex])))
                 {
                     timeLastButtonPressed = Time.time;
                     currentIndex++;

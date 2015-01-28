@@ -28,6 +28,8 @@ public class ScoreScript : MonoBehaviour
 
     public Transform canvas;
 
+    private Frisbee _frisbeeScript;
+
     // Use this for initialization
     void Start()
     {
@@ -53,7 +55,7 @@ public class ScoreScript : MonoBehaviour
             InstantiateUIPrefab(menuButton);
             InstantiateUIPrefab(resetButton);
             InstantiateUIPrefab(exitButton);
-            Frisbee.playerOneWin = false;
+            _frisbeeScript.playerOneWin = false;
             playerOneWin = false;
             Time.timeScale = 0;
         }
@@ -63,7 +65,7 @@ public class ScoreScript : MonoBehaviour
             InstantiateUIPrefab(menuButton);
             InstantiateUIPrefab(resetButton);
             InstantiateUIPrefab(exitButton);
-            Frisbee.playerTwoWin = false;
+            _frisbeeScript.playerTwoWin = false;
             playerTwoWin = false;
             Time.timeScale = 0;
         }
@@ -71,20 +73,20 @@ public class ScoreScript : MonoBehaviour
     }
     void LateUpdate()
     {
-        if (resetting)
+       /* if (resetting)
         {
             ResetPositions();
             resetting = false;
-        }
+        }*/
     }
 
-    public static void ResetPositions()
+    public void ResetPositions()
     {
 
-        Frisbee.playerCharacter.rigidbody2D.MovePosition(new Vector2(-9, 0));
-        Frisbee.AIChar.rigidbody2D.MovePosition(new Vector2(9, 0));
-        Frisbee.frisbee.rigidbody2D.MovePosition(new Vector2(0, 0));
-        Frisbee.frisbee.rigidbody2D.velocity = Vector2.zero;
+        _frisbeeScript.playerCharacter.rigidbody2D.MovePosition(new Vector2(-9, 0));
+        _frisbeeScript.AIChar.rigidbody2D.MovePosition(new Vector2(9, 0));
+        _frisbeeScript.frisbee.rigidbody2D.MovePosition(new Vector2(0, 0));
+        _frisbeeScript.frisbee.rigidbody2D.velocity = Vector2.zero;
         AI.powerValue = 50;
         PlayerControls.powerValue = 50;
         reset = true;

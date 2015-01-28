@@ -28,9 +28,11 @@ public class PlayerSelections : MonoBehaviour
         
         if (Application.loadedLevelName == "MPCourt")
         {
-            InstantiatePlayerOne();
-            InstantiatePlayerTwo();
             _frisbee = Instantiate(frisbee, new Vector2(0, 0), Quaternion.identity) as GameObject;
+            InstantiatePlayerOne();
+            _PlayerOne.tag = "PlayerOne";
+            InstantiatePlayerTwo();
+            _PlayerTwo.tag = "PlayerTwo";
             Debug.Log("Loaded?");
         }
     }
@@ -48,7 +50,7 @@ public class PlayerSelections : MonoBehaviour
         {
             _playerOneAbility = Player1.SelectedFloat;
             _playerTwoAbility = Player2.SelectedFloat;
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Throw"))
             {
                 if (_playerOneAbility != 0 && _playerTwoAbility != 0)
                 {
@@ -138,9 +140,11 @@ public class PlayerSelections : MonoBehaviour
     {
         if (level == 2)
         {
-            InstantiatePlayerOne();
-            InstantiatePlayerTwo();
             _frisbee = Instantiate(frisbee, new Vector2(0, 0), Quaternion.identity) as GameObject;
+            InstantiatePlayerOne();
+            _PlayerOne.tag = "PlayerOne";
+            InstantiatePlayerTwo();
+            _PlayerTwo.tag = "PlayerTwo";
             Debug.Log("Loaded?");
         }
     }

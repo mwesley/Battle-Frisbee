@@ -1,24 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class Frisbee : MonoBehaviour
+public class MPFrisbee : MonoBehaviour
 {
 
 
-    public GameObject frisbee;
-    public GameObject playerCharacter;
-    public GameObject AIChar;
-    public bool caught = false;
+    private GameObject _frisbee;
+    private GameObject _PlayerOne;
+    private GameObject _PlayerTwo;
+    public bool caught;
+    public bool PlayerOneCaught = false;
+    public bool PlayerTwoCaught = false;
 
     public bool playerOneWin = false;
     public bool playerTwoWin = false;
 
-    public GameObject frisbeePrefab;
+    public GameObject MultiplayerFrisbee;
 
     private float timer = 0f;
-
-    private Transform frisbeeTransform;
-    private Transform playerTransform;
 
     private Vector2 frisbeeVelocity;
 
@@ -30,16 +29,16 @@ public class Frisbee : MonoBehaviour
         frisbeeVelocity = new Vector2(-5.0f, 0f);
         rigidbody2D.AddForce(frisbeeVelocity);
 
-        playerCharacter = GameObject.FindWithTag("Player");
-        frisbee = GameObject.FindWithTag("frisbee");
-        AIChar = GameObject.FindWithTag("AI");
+        _PlayerOne = GameObject.FindWithTag("PlayerOne");
+        _PlayerTwo = GameObject.FindWithTag("PlayerTwo");
+        _frisbee = GameObject.FindWithTag("frisbee");
 
         playerOneWin = false;
         playerTwoWin = false;
+        PlayerOneCaught = false;
+        PlayerTwoCaught = false;
         caught = false;
 
-        frisbeeTransform = frisbee.transform;
-        playerTransform = playerCharacter.transform;
         _wall = GameObject.FindGameObjectWithTag("Wall");
     }
 
@@ -53,7 +52,7 @@ public class Frisbee : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= 2f)
             {
-                frisbee.rigidbody2D.AddForce(frisbeeVelocity);
+                _frisbee.rigidbody2D.AddForce(frisbeeVelocity);
                 ScoreScript.reset = false;
                 timer = 0f;
             }
@@ -73,32 +72,50 @@ public class Frisbee : MonoBehaviour
             ScoreScript.playerTwoWin = true;
         }
 
+        if(!_PlayerOne || !_PlayerTwo || !_frisbee)
+        {
+        _PlayerOne = GameObject.FindWithTag("PlayerOne");
+        _PlayerTwo = GameObject.FindWithTag("PlayerTwo");
+        _frisbee = GameObject.FindWithTag("frisbee");
+        }
+
+        if(PlayerOneCaught || PlayerTwoCaught)
+        {
+            caught = true;
+        }
+        else if (!PlayerOneCaught || !PlayerTwoCaught)
+        {
+            caught = false;
+        }
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "PlayerOne")
         {
             PlayerControls.special = false;
             PlayerControls.bezierFlight = false;
-            AI.bezierFlight = false;
-            frisbeeTransform.parent = playerTransform;
-            caught = true;
-            frisbeeTransform.localPosition = new Vector2(0.0f, 0.0f);
+            _frisbee.transform.SetParent(_PlayerOne.transform);
+            PlayerOneCaught = true;
+            _frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
             rigidbody2D.velocity = new Vector2(0, 0);
             PlayerControls.powerValue += 10;
         }
 
-        if (col.gameObject.tag == "AI")
+        if (col.gameObject.tag == "PlayerTwo")
         {
             PlayerControls.special = false;
             PlayerControls.bezierFlight = false;
-            AI.bezierFlight = false;
-            AI.frisbeeCaught = true;
-            AI.powerValue += 10;
+            _frisbee.transform.parent = _PlayerTwo.transform;
+            PlayerTwoCaught = true;
+            _frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
+            rigidbody2D.velocity = new Vector2(0, 0);
+            PlayerControls.powerValue += 10;
         }
 
-        if (PlayerControls.bezierFlight || AI.bezierFlight || PlayerControls.special)
+
+        if (PlayerControls.bezierFlight ||  PlayerControls.special)
         {
             if (col.gameObject.tag == "Wall" && !SidleAlongWall.sidle)
             {
@@ -115,7 +132,6 @@ public class Frisbee : MonoBehaviour
         {
             PlayerControls.special = false;
             PlayerControls.bezierFlight = false;
-            AI.bezierFlight = false;
             ScoreScript.resetting = true;
             ScoreScript.playerTwoRoundScore++;
             ScoreScript.p2RoundScore.text = "Score: " + ScoreScript.playerTwoRoundScore;
@@ -126,7 +142,6 @@ public class Frisbee : MonoBehaviour
         {
             PlayerControls.special = false;
             PlayerControls.bezierFlight = false;
-            AI.bezierFlight = false;
             ScoreScript.resetting = true;
             ScoreScript.playerOneRoundScore++;
             ScoreScript.p1RoundScore.text = "Score: " + ScoreScript.playerOneRoundScore;
@@ -147,8 +162,6 @@ public class Frisbee : MonoBehaviour
         }
 
         PlayerControls.bezierFlight = false;
-        AI.bezierFlight = false;
-        AI.dashing = false;
     }
 
 
