@@ -84,7 +84,7 @@ public class MPFrisbee : MonoBehaviour
 
         if (col.gameObject.tag == "PlayerTwo")
         {
-            _frisbee.transform.parent = _PlayerTwo.transform;
+            _frisbee.transform.SetParent(_PlayerTwo.transform);
             PlayerTwoCaught = true;
             _frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
             rigidbody2D.velocity = new Vector2(0, 0);
