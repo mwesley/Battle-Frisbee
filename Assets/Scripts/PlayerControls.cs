@@ -64,10 +64,7 @@ public class PlayerControls : MonoBehaviour
         justDashed = false;
         powerValue = 50f;
         frisbee = GameObject.FindWithTag("frisbee");
-
-       
-
-        
+          
     }
 
     protected void BezierMovement()

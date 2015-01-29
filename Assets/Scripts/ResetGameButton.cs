@@ -19,7 +19,7 @@ public class ResetGameButton : MonoBehaviour
 
     public void ResetButton()
     {
-        Application.LoadLevel("DebugLevel");
+        Application.LoadLevel(Application.loadedLevel);
         Time.timeScale = 1;
     }
 

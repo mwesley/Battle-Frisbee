@@ -30,7 +30,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
     public Bezier curveThrow;
 
     protected RaycastHit2D hit;
-    public Vector2 hitVec;
+    public Vector2 hitVecTwo;
 
     public float maxMovementSpeed;
 
@@ -44,16 +44,18 @@ public class MultiplayerPlayerTwo : MonoBehaviour
 
     protected LayerMask playerMask;
     protected LayerMask centerMask;
+    protected LayerMask wallMask;
     protected int playerMaskValue;
     protected int centerMaskValue;
+    protected int wallMaskValue;
     protected Vector2 pos;
 
     protected Vector2 playerDirection;
 
     public MPFrisbee _FrisbeeScript;
 
-    protected KeyCombo upCurve = new KeyCombo(new string[] { "down 2", "right 2", "Throw 2" });
-    protected KeyCombo downCurve = new KeyCombo(new string[] { "up 2", "right 2", "Throw 2" });
+    protected KeyCombo upCurve = new KeyCombo(new string[] { "down 2", "left 2", "Throw 2" });
+    protected KeyCombo downCurve = new KeyCombo(new string[] { "up 2", "left 2", "Throw 2" });
     protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special 2", "Special 2" });
 
     void Awake()
@@ -62,6 +64,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
         playerMaskValue = LayerMask.GetMask("Player");
         centerMaskValue = LayerMask.GetMask("CenterWall");
         justDashed = false;
+        wallMaskValue = LayerMask.GetMask("Wall");
         powerValue = 50f;
 
         frisbee = GameObject.FindWithTag("frisbee");
@@ -80,7 +83,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
                 if (t > 1f)
                 {
                     bezierFlight = false;
-                    frisbee.rigidbody2D.AddForce(hitVec);
+                    frisbee.rigidbody2D.AddForce(hitVecTwo);
                 }
 
             }
@@ -107,8 +110,12 @@ public class MultiplayerPlayerTwo : MonoBehaviour
         if (_FrisbeeScript.PlayerTwoCaught == true)
         {
 
-            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection);
-            hitVec = hit.point;
+            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
+            hitVecTwo = hit.point;
+            if(hitVecTwo == new Vector2(0,0))
+            {
+                hitVecTwo.x = -17.5f;
+            }
             this.rigidbody2D.velocity = Vector2.zero;
             bezierFlight = false;
 
@@ -117,7 +124,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
                 Debug.Log("Upping the curve!");
 
                 bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, 7), new Vector2(-10, 7), hitVec);
+                curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, 7), new Vector2(10, 7), hitVecTwo);
                 transform.DetachChildren();
                 _FrisbeeScript.PlayerTwoCaught = false;
                 isThrown = true;
@@ -127,7 +134,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
                 Debug.Log("Downing the curve!");
 
                 bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, -7), new Vector2(-10, -7), hitVec);
+                curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, -7), new Vector2(10, -7), hitVecTwo);
                 transform.DetachChildren();
                 _FrisbeeScript.PlayerTwoCaught = false;
                 isThrown = true;
@@ -251,5 +258,6 @@ public class MultiplayerPlayerTwo : MonoBehaviour
     void FixedUpdate()
     {
         pos = new Vector2(transform.position.x, transform.position.y);
+
     }
 }

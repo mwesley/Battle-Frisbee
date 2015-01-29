@@ -55,10 +55,10 @@ public class SidlePlayerTwo : MultiplayerPlayerTwo
             if (_upOrDown)
             {
                 Debug.Log(transform.eulerAngles.z);
-                if (transform.eulerAngles.z >= 90)
-                    _y = 15;
-                else
+                if (transform.eulerAngles.z >= 271)
                     _y = -15;
+                else
+                    _y = 15;
                 _upOrDown = false;
             }
         }

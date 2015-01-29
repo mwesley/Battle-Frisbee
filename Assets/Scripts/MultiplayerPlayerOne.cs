@@ -30,7 +30,7 @@ public class MultiplayerPlayerOne : MonoBehaviour
     public Bezier curveThrow;
 
     protected RaycastHit2D hit;
-    public Vector2 hitVec;
+    public Vector2 hitVecOne;
 
     public float maxMovementSpeed;
 
@@ -44,8 +44,10 @@ public class MultiplayerPlayerOne : MonoBehaviour
 
     protected LayerMask playerMask;
     protected LayerMask centerMask;
+    protected LayerMask wallMask;
     protected int playerMaskValue;
     protected int centerMaskValue;
+    protected int wallMaskValue;
     protected Vector2 pos;
 
     protected Vector2 playerDirection;
@@ -61,6 +63,7 @@ public class MultiplayerPlayerOne : MonoBehaviour
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
         centerMaskValue = LayerMask.GetMask("CenterWall");
+        wallMaskValue = LayerMask.GetMask("Wall");
         justDashed = false;
         powerValue = 50f;
 
@@ -80,7 +83,7 @@ public class MultiplayerPlayerOne : MonoBehaviour
                 if (t > 1f)
                 {
                     bezierFlight = false;
-                    frisbee.rigidbody2D.AddForce(hitVec);
+                    frisbee.rigidbody2D.AddForce(hitVecOne);
                 }
 
             }
@@ -107,8 +110,8 @@ public class MultiplayerPlayerOne : MonoBehaviour
         if (_FrisbeeScript.PlayerOneCaught == true)
         {
 
-            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection);
-            hitVec = hit.point;
+            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
+            hitVecOne = hit.point;
             this.rigidbody2D.velocity = Vector2.zero;
             bezierFlight = false;
 
@@ -117,7 +120,7 @@ public class MultiplayerPlayerOne : MonoBehaviour
                 Debug.Log("Upping the curve!");
 
                 bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, 7), new Vector2(-10, 7), hitVec);
+                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, 7), new Vector2(-10, 7), hitVecOne);
                 transform.DetachChildren();
                 _FrisbeeScript.PlayerOneCaught = false;
                 isThrown = true;
@@ -127,7 +130,7 @@ public class MultiplayerPlayerOne : MonoBehaviour
                 Debug.Log("Downing the curve!");
 
                 bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, -7), new Vector2(-10, -7), hitVec);
+                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, -7), new Vector2(-10, -7), hitVecOne);
                 transform.DetachChildren();
                 _FrisbeeScript.PlayerOneCaught = false;
                 isThrown = true;

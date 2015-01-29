@@ -14,11 +14,17 @@ public class PlayerSelections : MonoBehaviour
     private GameObject _PlayerTwo;
     private GameObject _frisbee;
 
-    public GameObject SinWavePlayer;
-    public GameObject DigitalSinPlayer;
-    public GameObject SlidePlayer;
-    public GameObject SawtoothPlayer;
-    public GameObject CirclePlayer;
+    public GameObject SinWavePlayerOne;
+    public GameObject DigitalSinPlayerOne;
+    public GameObject SlidePlayerOne;
+    public GameObject SawtoothPlayerOne;
+    public GameObject CirclePlayerOne;
+
+    public GameObject SinWavePlayerTwo;
+    public GameObject DigitalSinPlayerTwo;
+    public GameObject SlidePlayerTwo;
+    public GameObject SawtoothPlayerTwo;
+    public GameObject CirclePlayerTwo;
 
     public GameObject frisbee;
 
@@ -68,31 +74,31 @@ public class PlayerSelections : MonoBehaviour
         {
             case 1:
 
-                _PlayerOne = Instantiate(SinWavePlayer, new Vector2(-9, 0), Quaternion.identity) as GameObject;
+                _PlayerOne = Instantiate(SinWavePlayerOne, new Vector2(-9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 2:
 
-                _PlayerOne = Instantiate(DigitalSinPlayer, new Vector2(-9, 0), Quaternion.identity) as GameObject;
+                _PlayerOne = Instantiate(DigitalSinPlayerOne, new Vector2(-9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 3:
 
-                _PlayerOne = Instantiate(SlidePlayer, new Vector2(-9, 0), Quaternion.identity) as GameObject;
+                _PlayerOne = Instantiate(SlidePlayerOne, new Vector2(-9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 4:
 
-                _PlayerOne = Instantiate(SawtoothPlayer, new Vector2(-9, 0), Quaternion.identity) as GameObject;
+                _PlayerOne = Instantiate(SawtoothPlayerOne, new Vector2(-9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 5:
 
-                _PlayerOne = Instantiate(CirclePlayer, new Vector2(-9, 0), Quaternion.identity) as GameObject;
+                _PlayerOne = Instantiate(CirclePlayerOne, new Vector2(-9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
@@ -105,31 +111,31 @@ public class PlayerSelections : MonoBehaviour
         {
             case 1:
 
-                _PlayerTwo = Instantiate(SinWavePlayer, new Vector2(9, 0), Quaternion.identity) as GameObject;
+                _PlayerTwo = Instantiate(SinWavePlayerTwo, new Vector2(9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 2:
 
-                _PlayerTwo = Instantiate(DigitalSinPlayer, new Vector2(9, 0), Quaternion.identity) as GameObject;
+                _PlayerTwo = Instantiate(DigitalSinPlayerTwo, new Vector2(9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 3:
 
-                _PlayerTwo = Instantiate(SlidePlayer, new Vector2(9, 0), Quaternion.identity) as GameObject;
+                _PlayerTwo = Instantiate(SlidePlayerTwo, new Vector2(9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 4:
 
-                _PlayerTwo = Instantiate(SawtoothPlayer, new Vector2(9, 0), Quaternion.identity) as GameObject;
+                _PlayerTwo = Instantiate(SawtoothPlayerTwo, new Vector2(9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
             case 5:
 
-                _PlayerTwo = Instantiate(CirclePlayer, new Vector2(9, 0), Quaternion.identity) as GameObject;
+                _PlayerTwo = Instantiate(CirclePlayerTwo, new Vector2(9, 0), Quaternion.identity) as GameObject;
 
                 break;
 
