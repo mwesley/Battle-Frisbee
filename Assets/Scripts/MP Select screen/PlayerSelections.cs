@@ -56,7 +56,7 @@ public class PlayerSelections : MonoBehaviour
         {
             _playerOneAbility = Player1.SelectedFloat;
             _playerTwoAbility = Player2.SelectedFloat;
-            if (Input.GetButtonDown("Throw"))
+            if (Input.GetButtonDown("Submit"))
             {
                 if (_playerOneAbility != 0 && _playerTwoAbility != 0)
                 {

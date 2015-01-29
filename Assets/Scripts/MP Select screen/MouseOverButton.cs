@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class MouseOverButton : MonoBehaviour
 {
-    public MPSelectScreenFrisbee thisScript;
+    public MPSelectScreenFrisbee FrisbeeOne;
+    public MPSelectScreenFrisbee FrisbeeTwo;
 
     private Button thisButton;
 
@@ -13,7 +14,8 @@ public class MouseOverButton : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        FrisbeeOne = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
+        FrisbeeTwo = GameObject.FindWithTag("FrisbeeP2").GetComponent<MPSelectScreenFrisbee>();
     }
 
     // Update is called once per frame
@@ -22,16 +24,33 @@ public class MouseOverButton : MonoBehaviour
 
     }
 
+    void OnTriggerStay2D (Collider2D col)
+    {
+
+        switch (col.tag)
+        {
+            case "PlayerOne":
+                FrisbeeOne.Highlighted = this.tag;
+                if (Input.GetButtonDown("Throw"))
+                    FrisbeeOne.Selected = this.tag;
+                break;
+
+            case "PlayerTwo":
+                FrisbeeTwo.Highlighted = this.tag;
+                if (Input.GetButtonDown("Throw 2"))
+                    FrisbeeTwo.Selected = this.tag;
+                break;
+        }
+
+    }
+
     public void Highlighted()
     {
-        thisScript.Highlighted = this.gameObject.tag;
+        
     }
 
     public void Selected()
     {
-        thisScript.Selected = this.gameObject.tag;
-        thisButton = GetComponent<Button>();
-        thisButton.interactable = false;
         
     }
 }
