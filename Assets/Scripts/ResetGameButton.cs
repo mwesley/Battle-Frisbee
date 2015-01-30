@@ -33,8 +33,13 @@ public class ResetGameButton : MonoBehaviour
         Application.Quit();
     }
 
-    public void MenuButton()
+    public void SingleplayerButton()
     {
-        Application.LoadLevel("DebugScene");
+        Application.LoadLevel("SinglePlayer");
+    }
+
+    public void ControlButton()
+    {
+        Application.LoadLevel("ControlScreen");
     }
 }

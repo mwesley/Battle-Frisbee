@@ -43,6 +43,8 @@ public class ScoreScript : MonoBehaviour
         reset = false;
         playerOneRoundScore = 0f;
         playerTwoRoundScore = 0f;
+
+        _frisbeeScript = frisbee.GetComponent<Frisbee>();
     }
 
     // Update is called once per frame
@@ -73,11 +75,11 @@ public class ScoreScript : MonoBehaviour
     }
     void LateUpdate()
     {
-       /* if (resetting)
+        if (resetting)
         {
             ResetPositions();
             resetting = false;
-        }*/
+        }
     }
 
     public void ResetPositions()

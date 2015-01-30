@@ -60,5 +60,6 @@ public class Sawtooth : PlayerControls
         Dash();
 
         Movement();
+
     }
 }

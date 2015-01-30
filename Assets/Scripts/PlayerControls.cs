@@ -44,8 +44,10 @@ public class PlayerControls : MonoBehaviour
 
     protected LayerMask playerMask;
     protected LayerMask centerMask;
+    protected LayerMask wallMask;
     protected int playerMaskValue;
     protected int centerMaskValue;
+    protected int wallMaskValue;
     protected Vector2 pos;
 
     protected Vector2 playerDirection;
@@ -56,14 +58,16 @@ public class PlayerControls : MonoBehaviour
 
     public Frisbee _FrisbeeScript;
 
-    void Start()
+    void Awake()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
         centerMaskValue = LayerMask.GetMask("CenterWall");
+        wallMaskValue = LayerMask.GetMask("Wall");
         justDashed = false;
         powerValue = 50f;
         frisbee = GameObject.FindWithTag("frisbee");
+        _FrisbeeScript = frisbee.GetComponent<Frisbee>();
           
     }
 
@@ -109,7 +113,8 @@ public class PlayerControls : MonoBehaviour
         if (_FrisbeeScript.caught == true)
         {
 
-            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection);
+            hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
+            Debug.Log(hit.collider);
             hitVec = hit.point;
             rigidbody2D.velocity = Vector2.zero;
             bezierFlight = false;
@@ -188,6 +193,7 @@ public class PlayerControls : MonoBehaviour
         }
         if (_FrisbeeScript.caught)
         {
+            this.rigidbody2D.velocity = Vector2.zero;
             float x = Input.GetAxis("Horizontal 1");
             float y = Input.GetAxis("Vertical 1");
             z = Mathf.Atan2(-y, x) * Mathf.Rad2Deg;
