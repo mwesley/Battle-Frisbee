@@ -24,13 +24,13 @@ public class MPFrisbee : MonoBehaviour
     private GameObject _wall;
 
     private MPScoring _scoreScript;
-    private MultiplayerPlayerOne _playerOneScript;
-    private MultiplayerPlayerTwo _playerTwoScript;
+    private MultiplayerPlayerOnline _playerOneScript;
+    private MultiplayerPlayerOnline _playerTwoScript;
 
     // Use this for initialization
     void Start()
     {
-        frisbeeVelocity = new Vector2(-5.0f, 0f);
+        //frisbeeVelocity = new Vector2(-5.0f, 0f);
         rigidbody2D.AddForce(frisbeeVelocity);
 
         PlayerOne = GameObject.FindWithTag("PlayerOne");
@@ -46,8 +46,8 @@ public class MPFrisbee : MonoBehaviour
         _wall = GameObject.FindGameObjectWithTag("Wall");
 
         _scoreScript = (GameObject.FindWithTag("MainCamera")).GetComponent<MPScoring>();
-        _playerOneScript = PlayerOne.GetComponent<MultiplayerPlayerOne>();
-        _playerTwoScript = PlayerTwo.GetComponent<MultiplayerPlayerTwo>();
+        _playerOneScript = PlayerOne.GetComponent<MultiplayerPlayerOnline>();
+        _playerTwoScript = PlayerTwo.GetComponent<MultiplayerPlayerOnline>();
     }
 
 
