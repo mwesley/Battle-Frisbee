@@ -52,13 +52,13 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
 
     protected Vector2 playerDirection;
 
-    public MPFrisbee _FrisbeeScript;
+    public OnlineFrisbee _FrisbeeScript;
 
     protected KeyCombo upCurve = new KeyCombo(new string[] { "down", "right", "Throw" });
     protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "right", "Throw" });
     protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
 
-    void Awake()
+    void Start()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
@@ -68,7 +68,7 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
         powerValue = 50f;
 
         frisbee = GameObject.FindWithTag("frisbee");
-        _FrisbeeScript = frisbee.GetComponent<MPFrisbee>();
+        _FrisbeeScript = frisbee.GetComponent<OnlineFrisbee>();
     }
 
     protected void BezierMovement()

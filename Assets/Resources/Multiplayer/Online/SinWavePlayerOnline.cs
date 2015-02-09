@@ -50,7 +50,7 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
     void Update()
     {
 
-        if (photonView.isMine)
+        if (photonView.isMine && frisbee)
         {
             SinWaveSkill();
             Throw();

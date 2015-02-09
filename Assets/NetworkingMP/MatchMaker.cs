@@ -3,18 +3,27 @@ using System.Collections;
 
 public class MatchMaker : MonoBehaviour
 {
+    private GameObject player;
+    private bool _frisbee = false;
+
 
     // Use this for initialization
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings("0.3");
         //PhotonNetwork.logLevel = PhotonLogLevel.Full;
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (GameObject.FindWithTag("PlayerTwo") && !_frisbee)
+        {
+            PhotonNetwork.Instantiate("Multiplayer/Online/OnlineFrisbee", Vector3.zero, Quaternion.identity, 0);
+            _frisbee = true;
+        }
     }
 
     void OnGui()
@@ -37,20 +46,33 @@ public class MatchMaker : MonoBehaviour
     {
         string playerSelection = "Multiplayer/Online/SinWavePlayer";
 
-        GameObject player = PhotonNetwork.Instantiate(playerSelection, Vector3.zero, Quaternion.identity, 0);
+
+        if (PhotonNetwork.player.ID == 1)
+        {
+            player = PhotonNetwork.Instantiate(playerSelection, new Vector2(-10, 0), Quaternion.identity, 0);
+        }
+        else if (PhotonNetwork.player.ID == 2)
+        {
+            player = PhotonNetwork.Instantiate(playerSelection, new Vector2(10, 0), Quaternion.identity, 0);
+
+        }
 
         if (player.GetComponent<SinWavePlayerOnline>() != null)
         {
             SinWavePlayerOnline controller = player.GetComponent<SinWavePlayerOnline>();
             controller.enabled = true;
         }
-        if (!GameObject.FindWithTag("PlayerOne"))
+
+        switch(PhotonNetwork.player.ID)
         {
-            player.gameObject.tag = "PlayerOne";
-        }
-        else
-        {
-            player.gameObject.tag = "PlayerTwo";
+            case 1:
+                player.tag = "PlayerOne";
+                Debug.LogError("Player One has entered the game");
+                break;
+            case 2:
+                player.tag = "PlayerTwo";
+                Debug.LogError("Player Two has entered the game");
+                break;
         }
 
     }
