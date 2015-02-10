@@ -27,14 +27,17 @@ public class OnlineFrisbee : Photon.MonoBehaviour
     private MultiplayerPlayerOnline _playerOneScript;
     private MultiplayerPlayerOnline _playerTwoScript;
 
+    private bool _practice;
+    private bool _gameOn;
+
     // Use this for initialization
     void Start()
     {
-        //frisbeeVelocity = new Vector2(-5.0f, 0f);
-        rigidbody2D.AddForce(frisbeeVelocity);
+        
+        
 
-        PlayerOne = GameObject.FindWithTag("PlayerOne");
-        PlayerTwo = GameObject.FindWithTag("PlayerTwo");
+
+        //PlayerTwo = GameObject.FindWithTag("PlayerTwo");
         _frisbee = GameObject.FindWithTag("frisbee");
 
         playerOneWin = false;
@@ -46,8 +49,17 @@ public class OnlineFrisbee : Photon.MonoBehaviour
         _wall = GameObject.FindGameObjectWithTag("Wall");
 
         _scoreScript = (GameObject.FindWithTag("MainCamera")).GetComponent<MPScoring>();
-        _playerOneScript = PlayerOne.GetComponent<MultiplayerPlayerOnline>();
-        _playerTwoScript = PlayerTwo.GetComponent<MultiplayerPlayerOnline>();
+
+        if (GameObject.FindWithTag("PlayerOne"))
+        {
+            PlayerOne = GameObject.FindWithTag("PlayerOne");
+            _playerOneScript = PlayerOne.GetComponent<MultiplayerPlayerOnline>();
+            
+            Debug.Log("PlayerOne has entered");
+        }
+        //_playerTwoScript = PlayerTwo.GetComponent<MultiplayerPlayerOnline>();
+        
+
     }
 
 
@@ -67,6 +79,19 @@ public class OnlineFrisbee : Photon.MonoBehaviour
             PlayerOne = GameObject.FindWithTag("PlayerOne");
             PlayerTwo = GameObject.FindWithTag("PlayerTwo");
             _frisbee = GameObject.FindWithTag("frisbee");
+        }
+
+        if(PlayerOne && !_practice && !_gameOn)
+        {
+            frisbeeVelocity = new Vector2(-5.0f, 0f);
+            rigidbody2D.AddForce(frisbeeVelocity);
+            _practice = true;
+        }
+
+        if (PlayerOne && PlayerTwo && _practice)
+        {
+            _practice = false;
+            _gameOn = true;
         }
 
         if (PlayerOneCaught || PlayerTwoCaught)

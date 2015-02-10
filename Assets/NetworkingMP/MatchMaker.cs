@@ -19,11 +19,7 @@ public class MatchMaker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindWithTag("PlayerTwo") && !_frisbee)
-        {
-            PhotonNetwork.Instantiate("Multiplayer/Online/OnlineFrisbee", Vector3.zero, Quaternion.identity, 0);
-            _frisbee = true;
-        }
+        
     }
 
     void OnGui()

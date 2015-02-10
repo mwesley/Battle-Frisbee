@@ -66,9 +66,6 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
         wallMaskValue = LayerMask.GetMask("Wall");
         justDashed = false;
         powerValue = 50f;
-
-        frisbee = GameObject.FindWithTag("frisbee");
-        _FrisbeeScript = frisbee.GetComponent<OnlineFrisbee>();
     }
 
     protected void BezierMovement()

@@ -18,7 +18,7 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
         powerBar = GameObject.FindWithTag("PowerBar");
         specialSoundSource = (AudioSource)gameObject.AddComponent("AudioSource");
         specialSound = (AudioClip)Resources.Load("sounds/SinWave");
-
+        _FrisbeeScript = frisbee.GetComponent<OnlineFrisbee>();
     }
 
     private void SinWaveSkill()
@@ -54,7 +54,7 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
         {
             SinWaveSkill();
             Throw();
-            PowerBar();
+            //PowerBar();
             BezierMovement();
             Dash();
             Movement();
