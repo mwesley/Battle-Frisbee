@@ -5,6 +5,7 @@ public class MatchMaker : MonoBehaviour
 {
     private GameObject player;
     private bool _frisbee = false;
+    private PhotonView thisPhotonView;
 
 
     // Use this for initialization
@@ -19,7 +20,10 @@ public class MatchMaker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (PhotonNetwork.isMasterClient)
+        {
+            spawnFrisbee();
+        }
     }
 
     void OnGui()
@@ -40,22 +44,29 @@ public class MatchMaker : MonoBehaviour
 
     void OnJoinedRoom()
     {
-        string playerSelection = "Multiplayer/Online/SinWavePlayer";
+        string playerSelection1 = "Multiplayer/Online/SinWavePlayer";
+        string playerSelection2 = "Multiplayer/Online/SinWavePlayerTwo";
 
 
         if (PhotonNetwork.player.ID == 1)
         {
-            player = PhotonNetwork.Instantiate(playerSelection, new Vector2(-10, 0), Quaternion.identity, 0);
+            player = PhotonNetwork.Instantiate(playerSelection1, new Vector2(-10, 0), Quaternion.identity, 0);
+            thisPhotonView = player.GetComponent<PhotonView>();
         }
         else if (PhotonNetwork.player.ID == 2)
         {
-            player = PhotonNetwork.Instantiate(playerSelection, new Vector2(10, 0), Quaternion.identity, 0);
-
+            player = PhotonNetwork.Instantiate(playerSelection2, new Vector2(10, 0), Quaternion.identity, 0);
+            thisPhotonView = player.GetComponent<PhotonView>();
         }
 
         if (player.GetComponent<SinWavePlayerOnline>() != null)
         {
             SinWavePlayerOnline controller = player.GetComponent<SinWavePlayerOnline>();
+            controller.enabled = true;
+        }
+        if (player.GetComponent<SinWavePlayerOnlineTwo>() != null)
+        {
+            SinWavePlayerOnlineTwo controller = player.GetComponent<SinWavePlayerOnlineTwo>();
             controller.enabled = true;
         }
 
@@ -71,5 +82,13 @@ public class MatchMaker : MonoBehaviour
                 break;
         }
 
+    }
+    [RPC] void spawnFrisbee()
+    {
+        if (GameObject.FindWithTag("PlayerOne") && GameObject.FindWithTag("PlayerTwo") && !_frisbee)
+        {
+            GameObject frisbee = PhotonNetwork.Instantiate("Multiplayer/Online/OnlineFrisbee", Vector2.zero, Quaternion.identity, 0);
+            _frisbee = true;
+        }
     }
 }

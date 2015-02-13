@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MultiplayerPlayerTwo : MonoBehaviour
+public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
 {
     // up and down keys (to be set in the Inspector)
 
@@ -11,6 +11,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
     protected bool charging;
     protected bool dashing;
     public bool special;
+    public PhotonView thisPhotonView;
 
     public bool isThrown = false;
 
@@ -30,7 +31,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
     public Bezier curveThrow;
 
     protected RaycastHit2D hit;
-    public Vector2 hitVecTwo;
+    public Vector2 hitVecOne;
 
     public float maxMovementSpeed;
 
@@ -52,23 +53,22 @@ public class MultiplayerPlayerTwo : MonoBehaviour
 
     protected Vector2 playerDirection;
 
-    public MPFrisbee _FrisbeeScript;
+    public OnlineFrisbee _FrisbeeScript;
 
-    protected KeyCombo upCurve = new KeyCombo(new string[] { "down 2", "left 2", "Throw 2" });
-    protected KeyCombo downCurve = new KeyCombo(new string[] { "up 2", "left 2", "Throw 2" });
-    protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special 2", "Special 2" });
+    protected KeyCombo upCurve = new KeyCombo(new string[] { "down", "left", "Throw" });
+    protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "left", "Throw" });
+    protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
 
-    void Awake()
+    void Start()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
         centerMaskValue = LayerMask.GetMask("CenterWall");
-        justDashed = false;
         wallMaskValue = LayerMask.GetMask("Wall");
+        justDashed = false;
         powerValue = 50f;
+        thisPhotonView = this.gameObject.GetComponent<PhotonView>();
 
-        frisbee = GameObject.FindWithTag("frisbee");
-        _FrisbeeScript = frisbee.GetComponent<MPFrisbee>();
     }
 
     protected void BezierMovement()
@@ -83,7 +83,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
                 if (t > 1f)
                 {
                     bezierFlight = false;
-                    frisbee.rigidbody2D.AddForce(hitVecTwo);
+                    frisbee.rigidbody2D.AddForce(hitVecOne);
                 }
 
             }
@@ -100,59 +100,38 @@ public class MultiplayerPlayerTwo : MonoBehaviour
         powerBar.guiTexture.pixelInset = pos;
 
         powerValue = Mathf.Clamp(powerValue, 0, 100);
-        //powerValue -= 0.01f;
+        // powerValue -= 0.01f;
 
     }
-    
-    protected void Throw()
-    {
 
-        if (_FrisbeeScript.PlayerTwoCaught == true)
+    
+    public void Throw()
+    {
+        
+        if (_FrisbeeScript.PlayerTwoCaught)
         {
 
             hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
-            hitVecTwo = hit.point;
-            if(hitVecTwo == new Vector2(0,0))
-            {
-                hitVecTwo.x = -17.5f;
-            }
+            hitVecOne = hit.point;
             this.rigidbody2D.velocity = Vector2.zero;
             bezierFlight = false;
 
             if (upCurve.Check())
             {
-                Debug.Log("Upping the curve!");
-
-                bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, 7), new Vector2(10, 7), hitVecTwo);
-                transform.DetachChildren();
-                _FrisbeeScript.PlayerTwoCaught = false;
-                isThrown = true;
+                this.thisPhotonView.RPC("UpCurve", PhotonTargets.All);
             }
             else if (downCurve.Check())
             {
-                Debug.Log("Downing the curve!");
-
-                bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, -7), new Vector2(10, -7), hitVecTwo);
-                transform.DetachChildren();
-                _FrisbeeScript.PlayerTwoCaught = false;
-                isThrown = true;
+                this.thisPhotonView.RPC("DownCurve", PhotonTargets.All);
             }
             else if (specialAbility.Check())
             {
-
-                special = true;
-                _FrisbeeScript.PlayerTwoCaught = false;
-                isThrown = true;
-
+                Debug.Log("Special throw by playertwo");
+                this.thisPhotonView.RPC("SpecialThrow", PhotonTargets.All);
             }
-            else if (Input.GetButtonDown("Throw 2"))
+            else if (Input.GetButtonDown("Throw"))
             {
-                transform.DetachChildren();
-                frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
-                _FrisbeeScript.PlayerTwoCaught = false;
-                isThrown = true;
+                this.thisPhotonView.RPC("ThrowStraight", PhotonTargets.All);
             }
 
 
@@ -170,22 +149,17 @@ public class MultiplayerPlayerTwo : MonoBehaviour
         }
     }
 
-
-
-
-
     protected void Movement()
     {
 
-
-        playerDirection = new Vector2(Input.GetAxis("Horizontal 2"), Input.GetAxis("Vertical 2"));
+        playerDirection = new Vector2(Input.GetAxis("Horizontal 1"), Input.GetAxis("Vertical 1"));
         if (!dashing && !justDashed)
         {
             if (!_FrisbeeScript.PlayerTwoCaught)
             {
-                rigidbody2D.velocity = new Vector2(Input.GetAxis("Horizontal 2") * maxMovementSpeed, Input.GetAxis("Vertical 2") * maxMovementSpeed);
-                float x = Input.GetAxis("Horizontal 2");
-                float y = Input.GetAxis("Vertical 2");
+                rigidbody2D.velocity = new Vector2(Input.GetAxis("Horizontal 1") * maxMovementSpeed, Input.GetAxis("Vertical 1") * maxMovementSpeed);
+                float x = Input.GetAxis("Horizontal 1");
+                float y = Input.GetAxis("Vertical 1");
                 z = Mathf.Atan2(-y, x) * Mathf.Rad2Deg;
                 if (z == 0)
                 {
@@ -194,14 +168,14 @@ public class MultiplayerPlayerTwo : MonoBehaviour
                 transform.rotation = Quaternion.AngleAxis(90.0f - z, Vector3.forward);
 
 
-
             }
         }
         if (_FrisbeeScript.PlayerTwoCaught)
         {
+            frisbee.transform.SetParent(this.transform);
             this.rigidbody2D.velocity = Vector2.zero;
-            float x = Input.GetAxis("Horizontal 2");
-            float y = Input.GetAxis("Vertical 2");
+            float x = Input.GetAxis("Horizontal 1");
+            float y = Input.GetAxis("Vertical 1");
             z = Mathf.Atan2(-y, x) * Mathf.Rad2Deg;
             if (z == 0)
             {
@@ -209,8 +183,6 @@ public class MultiplayerPlayerTwo : MonoBehaviour
             }
             transform.rotation = Quaternion.AngleAxis(90.0f - z, Vector3.forward);
         }
-
-        
     }
 
 
@@ -221,7 +193,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
 
         if (!_FrisbeeScript.caught)
         {
-            if (Input.GetButtonDown("Dash 2") && !justDashed)
+            if (Input.GetButtonDown("Dash") && !justDashed)
             {
                 dashing = true;
             }
@@ -258,6 +230,48 @@ public class MultiplayerPlayerTwo : MonoBehaviour
     void FixedUpdate()
     {
         pos = new Vector2(transform.position.x, transform.position.y);
+    }
 
+    [RPC] protected void ThrowStraight()
+    {
+        transform.DetachChildren();
+        frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
+        _FrisbeeScript.PlayerTwoCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+        Debug.Log("Player two throw");
+    }
+
+    [RPC] protected void UpCurve()
+    {
+        Debug.Log("Upping the curve!");
+
+        bezierFlight = true;
+        curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, 7), new Vector2(10, 7), hitVecOne);
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerTwoCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+    }
+
+    [RPC] protected void DownCurve()
+    {
+        Debug.Log("Downing the curve!");
+
+        bezierFlight = true;
+        curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, -7), new Vector2(10, -7), hitVecOne);
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerTwoCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+    }
+
+    [RPC] protected void SpecialThrow()
+    {
+        special = true;
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerTwoCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
     }
 }

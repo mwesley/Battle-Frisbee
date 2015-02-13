@@ -7,6 +7,11 @@ public class NetworkPlayer : Photon.MonoBehaviour
     private Quaternion correctPlayerRot;
     private string correctTag;
 
+    void Start()
+    {
+
+    }
+
     void Update()
     {
         if(!photonView.isMine)
@@ -25,6 +30,7 @@ public class NetworkPlayer : Photon.MonoBehaviour
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
             stream.SendNext(tag);
+
         }
         else
         {
@@ -32,7 +38,10 @@ public class NetworkPlayer : Photon.MonoBehaviour
             this.correctPlayerPos = (Vector3)stream.ReceiveNext();
             this.correctPlayerRot = (Quaternion)stream.ReceiveNext();
             this.correctTag = (string)stream.ReceiveNext();
+
         }
     }
+
+
 
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SinWavePlayerOnline : MultiplayerPlayerOnline
+public class SinWavePlayerOnlineTwo : MultiplayerPlayerOnlineTwo
 {
 
     private float _y;
@@ -9,6 +9,7 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
     private float _time;
     private AudioClip specialSound;
     private AudioSource specialSoundSource;
+
 
     // Use this for initialization
     void Start()
@@ -21,7 +22,6 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
         _FrisbeeScript = frisbee.GetComponent<OnlineFrisbee>();
     }
 
-
     private void SinWaveSkill()
     {
 
@@ -33,12 +33,7 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
 
         if (special)
         {
-            specialSoundSource.PlayOneShot(specialSound);
-            transform.DetachChildren();
-            Vector2 frisbeeVelocity = new Vector2(_x, _y);
-            frisbee.rigidbody2D.velocity = frisbeeVelocity;
-            _time += Time.deltaTime;
-            Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D);
+            this.thisPhotonView.RPC("SpecialInProgress", PhotonTargets.All);
         }
         if (!special)
         {
@@ -63,4 +58,13 @@ public class SinWavePlayerOnline : MultiplayerPlayerOnline
 
     }
 
+    [RPC] void SpecialInProgress()
+    {
+            specialSoundSource.PlayOneShot(specialSound);
+            transform.DetachChildren();
+            Vector2 frisbeeVelocity = new Vector2(_x, _y);
+            frisbee.rigidbody2D.velocity = frisbeeVelocity;
+            _time += Time.deltaTime;
+            Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D);
+    }
 }

@@ -104,7 +104,7 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
     protected void Throw()
     {
 
-        if (_FrisbeeScript.PlayerOneCaught == true)
+        if (_FrisbeeScript.PlayerOneCaught)
         {
 
             hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);

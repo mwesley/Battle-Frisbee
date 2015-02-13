@@ -1,66 +1,72 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SinWavePlayerOnline : MultiplayerPlayerOnline
+public class SidlePlayerOnlineTwo : MultiplayerPlayerOnlineTwo
 {
-
+    private float _speed;
+    private float _time;
     private float _y;
     private float _x;
-    private float _time;
-    private AudioClip specialSound;
-    private AudioSource specialSoundSource;
+    private bool _upOrDown;
+    public static bool sidle;
 
     // Use this for initialization
     void Start()
     {
-        _time = 0f;
+        sidle = false;
+        _upOrDown = true;
         frisbee = GameObject.FindWithTag("frisbee");
         powerBar = GameObject.FindWithTag("PowerBar");
-        specialSoundSource = (AudioSource)gameObject.AddComponent("AudioSource");
-        specialSound = (AudioClip)Resources.Load("sounds/SinWave");
-        _FrisbeeScript = frisbee.GetComponent<OnlineFrisbee>();
     }
 
-
-    private void SinWaveSkill()
+    private void WallSidle()
     {
-
-        _y = (30 * Mathf.Cos(_time * 10));
-        _x = 10f;
+        _x = 15;
 
         if (this.tag == "PlayerTwo")
             _x = -_x;
 
         if (special)
         {
-            specialSoundSource.PlayOneShot(specialSound);
+            sidle = true;
             transform.DetachChildren();
             Vector2 frisbeeVelocity = new Vector2(_x, _y);
             frisbee.rigidbody2D.velocity = frisbeeVelocity;
-            _time += Time.deltaTime;
             Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D);
         }
         if (!special)
         {
-            _time = 0f;
             Physics2D.IgnoreCollision(this.collider2D, frisbee.collider2D, false);
+            sidle = false;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        Throw();
+        PowerBar();
+        BezierMovement();
+        Dash();
+        WallSidle();
 
-        if (photonView.isMine && frisbee)
+        if (special)
         {
-            SinWaveSkill();
-            Throw();
-            //PowerBar();
-            BezierMovement();
-            Dash();
-            Movement();
+            if (_upOrDown)
+            {
+                Debug.Log(transform.eulerAngles.z);
+                if (transform.eulerAngles.z >= 90)
+                    _y = 15;
+                else
+                    _y = -15;
+                _upOrDown = false;
+            }
         }
+        if (!sidle)
+            _upOrDown = true;
+
+
+        Movement();
 
     }
-
 }
