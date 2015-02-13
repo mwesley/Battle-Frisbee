@@ -59,7 +59,7 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
     protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "left", "Throw" });
     protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
 
-    void Start()
+    void Awake()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
@@ -92,7 +92,6 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
             t = 0f;
     }
 
-
     protected void PowerBar()
     {
         Rect pos = powerBar.guiTexture.pixelInset;
@@ -104,10 +103,9 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
 
     }
 
-    
     public void Throw()
     {
-        
+
         if (_FrisbeeScript.PlayerTwoCaught)
         {
 
@@ -133,18 +131,14 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
             {
                 this.thisPhotonView.RPC("ThrowStraight", PhotonTargets.All);
             }
-
-
         }
-
         if (isThrown == true)
         {
             throwTimer += Time.deltaTime;
+            Debug.Log(throwTimer);
             if (throwTimer > 1)
             {
-                isThrown = false;
-                gameObject.collider2D.enabled = true;
-                throwTimer = 0;
+                this.thisPhotonView.RPC("ThrownCheck", PhotonTargets.All);
             }
         }
     }
@@ -184,7 +178,6 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(90.0f - z, Vector3.forward);
         }
     }
-
 
     protected void Dash()
     {
@@ -232,7 +225,8 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         pos = new Vector2(transform.position.x, transform.position.y);
     }
 
-    [RPC] protected void ThrowStraight()
+    [RPC]
+    protected void ThrowStraight()
     {
         transform.DetachChildren();
         frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
@@ -242,7 +236,8 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         Debug.Log("Player two throw");
     }
 
-    [RPC] protected void UpCurve()
+    [RPC]
+    protected void UpCurve()
     {
         Debug.Log("Upping the curve!");
 
@@ -254,7 +249,8 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         _FrisbeeScript.caught = false;
     }
 
-    [RPC] protected void DownCurve()
+    [RPC]
+    protected void DownCurve()
     {
         Debug.Log("Downing the curve!");
 
@@ -266,12 +262,21 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         _FrisbeeScript.caught = false;
     }
 
-    [RPC] protected void SpecialThrow()
+    [RPC]
+    protected void SpecialThrow()
     {
         special = true;
         transform.DetachChildren();
         _FrisbeeScript.PlayerTwoCaught = false;
         isThrown = true;
         _FrisbeeScript.caught = false;
+    }
+
+    [RPC]
+    protected void ThrownCheck()
+    {
+        isThrown = false;
+        gameObject.collider2D.enabled = true;
+        throwTimer = 0;
     }
 }

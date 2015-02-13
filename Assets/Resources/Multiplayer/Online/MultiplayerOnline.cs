@@ -11,6 +11,7 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
     protected bool charging;
     protected bool dashing;
     public bool special;
+    public PhotonView thisPhotonView;
 
     public bool isThrown = false;
 
@@ -58,7 +59,7 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
     protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "right", "Throw" });
     protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
 
-    void Start()
+    void Awake()
     {
         t = 0f;
         playerMaskValue = LayerMask.GetMask("Player");
@@ -66,6 +67,8 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
         wallMaskValue = LayerMask.GetMask("Wall");
         justDashed = false;
         powerValue = 50f;
+        thisPhotonView = this.gameObject.GetComponent<PhotonView>();
+
     }
 
     protected void BezierMovement()
@@ -103,10 +106,8 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
 
     protected void Throw()
     {
-
         if (_FrisbeeScript.PlayerOneCaught)
         {
-
             hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
             hitVecOne = hit.point;
             this.rigidbody2D.velocity = Vector2.zero;
@@ -114,58 +115,31 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
 
             if (upCurve.Check())
             {
-                Debug.Log("Upping the curve!");
-
-                bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, 7), new Vector2(-10, 7), hitVecOne);
-                transform.DetachChildren();
-                _FrisbeeScript.PlayerOneCaught = false;
-                isThrown = true;
+                this.thisPhotonView.RPC("UpCurve", PhotonTargets.All);
             }
             else if (downCurve.Check())
             {
-                Debug.Log("Downing the curve!");
+                this.thisPhotonView.RPC("DownCurve", PhotonTargets.All);
 
-                bezierFlight = true;
-                curveThrow = new Bezier(frisbee.transform.position, new Vector2(10, -7), new Vector2(-10, -7), hitVecOne);
-                transform.DetachChildren();
-                _FrisbeeScript.PlayerOneCaught = false;
-                isThrown = true;
             }
             else if (specialAbility.Check())
             {
-
-                special = true;
-                _FrisbeeScript.PlayerOneCaught = false;
-                isThrown = true;
-
+                this.thisPhotonView.RPC("SpecialThrow", PhotonTargets.All);
             }
             else if (Input.GetButtonDown("Throw"))
             {
-                transform.DetachChildren();
-                frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
-                _FrisbeeScript.PlayerOneCaught = false;
-                isThrown = true;
+                this.thisPhotonView.RPC("ThrowStraight", PhotonTargets.All);
             }
-
-
         }
-
         if (isThrown == true)
         {
             throwTimer += Time.deltaTime;
             if (throwTimer > 1)
             {
-                isThrown = false;
-                gameObject.collider2D.enabled = true;
-                throwTimer = 0;
+                this.thisPhotonView.RPC("ThrownCheck", PhotonTargets.All);
             }
         }
     }
-
-
-
-
 
     protected void Movement()
     {
@@ -239,5 +213,61 @@ public class MultiplayerPlayerOnline : Photon.MonoBehaviour
     void FixedUpdate()
     {
         pos = new Vector2(transform.position.x, transform.position.y);
+    }
+
+    [RPC]
+    protected void ThrowStraight()
+    {
+        transform.DetachChildren();
+        frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
+        _FrisbeeScript.PlayerOneCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+        Debug.Log("Player two throw");
+    }
+
+    [RPC]
+    protected void UpCurve()
+    {
+        Debug.Log("Upping the curve!");
+
+        bezierFlight = true;
+        curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, 7), new Vector2(10, 7), hitVecOne);
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerOneCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+    }
+
+    [RPC]
+    protected void DownCurve()
+    {
+        Debug.Log("Downing the curve!");
+
+        bezierFlight = true;
+        curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, -7), new Vector2(10, -7), hitVecOne);
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerOneCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+        
+    }
+
+    [RPC]
+    protected void SpecialThrow()
+    {
+        special = true;
+        transform.DetachChildren();
+        _FrisbeeScript.PlayerOneCaught = false;
+        isThrown = true;
+        _FrisbeeScript.caught = false;
+    }
+
+    [RPC]
+    protected void ThrownCheck()
+    {
+        isThrown = false;
+        gameObject.collider2D.enabled = true;
+        throwTimer = 0;
     }
 }
