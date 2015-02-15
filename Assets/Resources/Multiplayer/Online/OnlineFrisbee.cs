@@ -97,7 +97,19 @@ public class OnlineFrisbee : Photon.MonoBehaviour
         float z = Mathf.Atan2(-y, x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(90.0f - z, Vector3.forward);
 
+        if (PlayerOneCaught)
+        {
+            //this.transform.SetParent(PlayerOne.transform);
+            _playerTwoScript.special = false;
+            _playerTwoScript.bezierFlight = false;
+        }
 
+        if(PlayerTwoCaught)
+        {
+            //this.transform.SetParent(PlayerTwo.transform);
+            _playerOneScript.special = false;
+            _playerOneScript.bezierFlight = false;
+        }
 
 
         if (PlayerOne && !_practice && !_gameOn)

@@ -7,6 +7,15 @@ public class MatchMaker : MonoBehaviour
     private bool _frisbee = false;
     private PhotonView thisPhotonView;
 
+    private string roomName = "Room01";
+    private string roomStatus = "";
+
+    private int maxPlayer = 1;
+    private string maxPlayerString = "1";
+
+    private Room[] game;
+
+    private Vector2 scrollPosition;
 
     // Use this for initialization
     void Start()
@@ -23,10 +32,77 @@ public class MatchMaker : MonoBehaviour
         spawnFrisbee();
     }
 
-    void OnGui()
+    void OnGUI()
     {
         GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+
+        if (PhotonNetwork.insideLobby ==  true)
+        {
+            GUI.Box(new Rect(Screen.width / 2.5f, Screen.height / 3, 400, 550), "");
+            GUILayout.BeginArea(new Rect(Screen.width / 2.5f, Screen.height / 3f, 400, 500));
+            GUI.color = Color.red;
+            GUILayout.Box("Lobby");
+            GUI.color = Color.white;
+
+            GUILayout.Label("Room Name:");
+            roomName = GUILayout.TextField("Room Name");
+            GUILayout.Label("Max Amount of player 1-20:");
+            maxPlayerString = GUILayout.TextField(maxPlayerString, 2);
+
+            if (maxPlayerString != "")
+            {
+                maxPlayer = int.Parse(maxPlayerString);
+
+                if (maxPlayer > 20)
+                    maxPlayer = 20;
+                if (maxPlayer == 0)
+                    maxPlayer = 1;
+            }
+            else
+            {
+                maxPlayer = 1;
+            }
+
+            if (GUILayout.Button("Create Room"))
+            {
+                if (roomName != "" && maxPlayer > 0) // if the room name has a name and max players are larger then 0
+                {
+                    PhotonNetwork.CreateRoom(roomName, true, true, maxPlayer); // then create a photon room visible , and open with the maxplayers provide by user.
+
+                }
+            }
+
+            GUILayout.Space(20);
+            GUI.color = Color.red;
+            GUILayout.Box("Game Rooms");
+            GUI.color = Color.white;
+            GUILayout.Space(20);
+
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true, GUILayout.Width(400), GUILayout.Height(300));
+
+            foreach (RoomInfo game in PhotonNetwork.GetRoomList()) // Each RoomInfo "game" in the amount of games created "rooms" display the fallowing.
+            {
+
+                GUI.color = Color.green;
+                GUILayout.Box(game.name + " " + game.playerCount + "/" + game.maxPlayers); //Thus we are in a for loop of games rooms display the game.name provide assigned above, playercount, and max players provided. EX 2/20
+                GUI.color = Color.white;
+
+                if (GUILayout.Button("Join Room"))
+                {
+
+                    PhotonNetwork.JoinRoom(game.name); // Next to each room there is a button to join the listed game.name in the current loop.
+                }
+            }
+
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
+
+
+        }
     }
+
+
+
 
     void OnJoinedLobby()
     {

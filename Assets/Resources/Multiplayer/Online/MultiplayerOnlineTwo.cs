@@ -58,6 +58,8 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
     protected KeyCombo upCurve = new KeyCombo(new string[] { "down", "left", "Throw" });
     protected KeyCombo downCurve = new KeyCombo(new string[] { "up", "left", "Throw" });
     protected KeyCombo specialAbility = new KeyCombo(new string[] { "Special", "Special" });
+    protected Vector2 aimDir;
+
 
     void Awake()
     {
@@ -77,19 +79,30 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         {
             if (bezierFlight == true)
             {
-                Vector3 vec = curveThrow.GetPointAtTime(t);
-                frisbee.transform.position = vec;
-                t += powerValue / 5000;
-                if (t > 1f)
-                {
-                    bezierFlight = false;
-                    frisbee.rigidbody2D.AddForce(hitVecOne);
-                }
-
+                this.thisPhotonView.RPC("BezierFlightInProgress", PhotonTargets.All);
             }
         }
         if (bezierFlight == false)
-            t = 0f;
+            this.thisPhotonView.RPC("BezierFlightEnd", PhotonTargets.All);
+    }
+
+    [RPC]
+    protected void BezierFlightInProgress()
+    {
+        Vector3 vec = curveThrow.GetPointAtTime(t);
+        frisbee.transform.position = vec;
+        t += powerValue / 5000;
+        if (t > 1f)
+        {
+            bezierFlight = false;
+            frisbee.rigidbody2D.AddForce(hitVecOne);
+        }
+    }
+
+    [RPC]
+    protected void BezierFlightEnd()
+    {
+        t = 0f;
     }
 
     protected void PowerBar()
@@ -108,7 +121,6 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
 
         if (_FrisbeeScript.PlayerTwoCaught)
         {
-
             hit = Physics2D.Raycast(frisbee.transform.position, playerDirection, Mathf.Infinity, wallMaskValue);
             hitVecOne = hit.point;
             this.rigidbody2D.velocity = Vector2.zero;
@@ -166,6 +178,7 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         }
         if (_FrisbeeScript.PlayerTwoCaught)
         {
+            frisbee.transform.localPosition = new Vector2(0.0f, -0.25f);
             frisbee.transform.SetParent(this.transform);
             this.rigidbody2D.velocity = Vector2.zero;
             float x = Input.GetAxis("Horizontal 1");
@@ -228,8 +241,13 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
     [RPC]
     protected void ThrowStraight()
     {
+        float theta = transform.rotation.eulerAngles.z;
+        float x = Mathf.Sin(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        float y = Mathf.Cos(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        aimDir = new Vector2(x, -y);
+        aimDir.Normalize();
         transform.DetachChildren();
-        frisbee.rigidbody2D.AddForce(-transform.up * powerValue / 6.66f);
+        frisbee.rigidbody2D.AddForce(aimDir * powerValue / 6.66f);
         _FrisbeeScript.PlayerTwoCaught = false;
         isThrown = true;
         _FrisbeeScript.caught = false;
@@ -239,8 +257,13 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
     [RPC]
     protected void UpCurve()
     {
-        Debug.Log("Upping the curve!");
-
+        float theta = transform.rotation.eulerAngles.z;
+        float x = Mathf.Sin(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        float y = Mathf.Cos(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        aimDir = new Vector2(x, -y);
+        hit = Physics2D.Raycast(frisbee.transform.position, aimDir, Mathf.Infinity, wallMaskValue);
+        hitVecOne = hit.point;
+        Debug.LogError(aimDir);
         bezierFlight = true;
         curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, 7), new Vector2(10, 7), hitVecOne);
         transform.DetachChildren();
@@ -252,8 +275,13 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
     [RPC]
     protected void DownCurve()
     {
-        Debug.Log("Downing the curve!");
-
+        float theta = transform.rotation.eulerAngles.z;
+        float x = Mathf.Sin(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        float y = Mathf.Cos(theta * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+        aimDir = new Vector2(x, -y);
+        hit = Physics2D.Raycast(frisbee.transform.position, aimDir, Mathf.Infinity, wallMaskValue);
+        hitVecOne = hit.point;
+        Debug.LogError(aimDir);
         bezierFlight = true;
         curveThrow = new Bezier(frisbee.transform.position, new Vector2(-10, -7), new Vector2(10, -7), hitVecOne);
         transform.DetachChildren();
@@ -279,4 +307,27 @@ public class MultiplayerPlayerOnlineTwo : Photon.MonoBehaviour
         gameObject.collider2D.enabled = true;
         throwTimer = 0;
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        switch(col.gameObject.tag)
+        {
+            case "frisbee":
+
+                this.thisPhotonView.RPC("CaughtPlayerTwo", PhotonTargets.All);
+
+                break;
+
+        }
+    }
+
+    [RPC]
+    protected void CaughtPlayerTwo()
+    {
+        frisbee.transform.SetParent(this.transform);
+        _FrisbeeScript.PlayerTwoCaught = true;
+        frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
+        frisbee.rigidbody2D.velocity = new Vector2(0, 0);
+    }
+
 }
