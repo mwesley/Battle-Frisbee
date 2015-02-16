@@ -17,19 +17,37 @@ public class MatchMaker : MonoBehaviour
 
     private Vector2 scrollPosition;
 
+    private MPSelectScreenFrisbee _selection;
+    private bool _selected;
+    private GameObject _selectionPrefab;
+    private GameObject _courtPrefab;
+
+    private string playerSelection1;
+    private string playerSelection2;
+
     // Use this for initialization
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("0.3");
+        _selectionPrefab = GameObject.FindWithTag("SelectionScreen");
+        _courtPrefab = GameObject.FindWithTag("Court");
+        _courtPrefab.SetActive(false);
+        _selection = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
         //PhotonNetwork.logLevel = PhotonLogLevel.Full;
-
-        
     }
 
     // Update is called once per frame
     void Update()
     {
         spawnFrisbee();
+        if(_selection.SelectedFloat != 0 && !_selected)
+        {
+            PhotonNetwork.ConnectUsingSettings("0.3");
+            _selectionPrefab.SetActive(false);
+            _courtPrefab.SetActive(true);
+            _selected = true;
+            Camera.main.orthographicSize = 10;
+            Debug.Log("Connection");
+        }
     }
 
     void OnGUI()
@@ -101,9 +119,6 @@ public class MatchMaker : MonoBehaviour
         }
     }
 
-
-
-
     void OnJoinedLobby()
     {
         PhotonNetwork.JoinRandomRoom();
@@ -117,9 +132,50 @@ public class MatchMaker : MonoBehaviour
 
     void OnJoinedRoom()
     {
-        string playerSelection1 = "Multiplayer/Online/SinWavePlayer";
-        string playerSelection2 = "Multiplayer/Online/SinWavePlayerTwo";
+        switch (PhotonNetwork.player.ID)
+        {
+            case 1:
+                switch (_selection.SelectedFloat)
+                {
+                    case 1:
+                        playerSelection1 = "Multiplayer/Online/SinWavePlayer";
+                        break;
+                    case 2:
+                        playerSelection1 = "Multiplayer/Online/DigitalSinPlayer";
+                        break;
+                    case 3:
+                        playerSelection1 = "Multiplayer/Online/SlidePlayer";
+                        break;
+                    case 4:
+                        playerSelection1 = "Multiplayer/Online/SawtoothPlayer";
+                        break;
+                    case 5:
+                        playerSelection1 = "Multiplayer/Online/CirclePlayer";
+                        break;
+                }
+                break;
 
+            case 2:
+                switch (_selection.SelectedFloat)
+                {
+                    case 1:
+                        playerSelection2 = "Multiplayer/Online/SinWavePlayerTwo";
+                        break;
+                    case 2:
+                        playerSelection2 = "Multiplayer/Online/DigitalSinPlayerTwo";
+                        break;
+                    case 3:
+                        playerSelection2 = "Multiplayer/Online/SlidePlayerTwo";
+                        break;
+                    case 4:
+                        playerSelection2 = "Multiplayer/Online/SawtoothPlayerTwo";
+                        break;
+                    case 5:
+                        playerSelection2 = "Multiplayer/Online/CirclePlayerTwo";
+                        break;
+                }
+                break;
+        }
 
         if (PhotonNetwork.player.ID == 1)
         {
@@ -156,6 +212,7 @@ public class MatchMaker : MonoBehaviour
         }
 
     }
+
     [RPC] void spawnFrisbee()
     {
         if (GameObject.FindWithTag("PlayerOne") && GameObject.FindWithTag("PlayerTwo") && !_frisbee)
