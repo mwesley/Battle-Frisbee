@@ -14,7 +14,7 @@ public class SinWave : PlayerControls
     void Start()
     {
         _time = 0f;
-        frisbee = GameObject.FindWithTag("frisbee");
+        //frisbee = GameObject.FindWithTag("frisbee");
         powerBar = GameObject.FindWithTag("PowerBar");
         specialSoundSource = (AudioSource)gameObject.AddComponent("AudioSource");
         specialSound = (AudioClip)Resources.Load("sounds/SinWave");

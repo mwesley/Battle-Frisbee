@@ -26,12 +26,18 @@ public class MatchMaker : MonoBehaviour
     private string playerSelection2;
 
     // Use this for initialization
+    void Awake()
+    {
+        _selection = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
+        _selectionPrefab = GameObject.FindWithTag("SelectionScreen");
+
+    }
+
     void Start()
     {
-        _selectionPrefab = GameObject.FindWithTag("SelectionScreen");
         _courtPrefab = GameObject.FindWithTag("Court");
         _courtPrefab.SetActive(false);
-        _selection = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
+        //_selection = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
         //PhotonNetwork.logLevel = PhotonLogLevel.Full;
     }
 
@@ -217,9 +223,12 @@ public class MatchMaker : MonoBehaviour
     {
         if (GameObject.FindWithTag("PlayerOne") && GameObject.FindWithTag("PlayerTwo") && !_frisbee)
         {
-            Object frisbee = Resources.Load("Multiplayer/Online/OnlineFrisbee");
-            Instantiate(frisbee, Vector2.zero, Quaternion.identity);
-            _frisbee = true;
+            if (PhotonNetwork.isMasterClient)
+            {
+                GameObject frisbee = PhotonNetwork.Instantiate("Multiplayer/Online/OnlineFrisbee", Vector3.zero, Quaternion.identity, 0);
+                frisbee.rigidbody2D.AddForce(new Vector2(-1f, 0f));
+                _frisbee = true;
+            }
         }
     }
 }

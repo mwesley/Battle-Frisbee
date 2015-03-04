@@ -4,6 +4,7 @@ using System.Collections;
 public class OnlineFrisbee : Photon.MonoBehaviour
 {
 
+    public PhotonView thisPhotonView;
 
     private GameObject _frisbee;
     public GameObject PlayerOne;
@@ -34,6 +35,7 @@ public class OnlineFrisbee : Photon.MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        thisPhotonView = this.gameObject.GetComponent<PhotonView>();
 
         _frisbee = GameObject.FindWithTag("frisbee");
 
@@ -69,7 +71,7 @@ public class OnlineFrisbee : Photon.MonoBehaviour
             Debug.Log("PlayerTwo has entered");
         }
 
-
+        rigidbody2D.AddForce(new Vector2(-1f, 0f));
 
     }
 
@@ -99,14 +101,14 @@ public class OnlineFrisbee : Photon.MonoBehaviour
 
         if (PlayerOneCaught)
         {
-            //this.transform.SetParent(PlayerOne.transform);
+            _frisbee.transform.position = new Vector2(PlayerOne.transform.position.x +1.5f, PlayerOne.transform.position.y);
             _playerTwoScript.special = false;
             _playerTwoScript.bezierFlight = false;
         }
 
         if(PlayerTwoCaught)
         {
-            //this.transform.SetParent(PlayerTwo.transform);
+            _frisbee.transform.position = new Vector2(PlayerTwo.transform.position.x - 1.5f, PlayerTwo.transform.position.y);
             _playerOneScript.special = false;
             _playerOneScript.bezierFlight = false;
         }
@@ -154,9 +156,9 @@ public class OnlineFrisbee : Photon.MonoBehaviour
         {
             case "PlayerOne":
 
-                _frisbee.transform.SetParent(PlayerOne.transform);
+                //_frisbee.transform.SetParent(PlayerOne.transform);
                 PlayerOneCaught = true;
-                _frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
+                //_frisbee.transform.localPosition = new Vector2(0f, -0.2f);
                 rigidbody2D.velocity = new Vector2(0, 0);
                 _playerTwoScript.special = false;
                 _playerTwoScript.bezierFlight = false;
@@ -165,12 +167,8 @@ public class OnlineFrisbee : Photon.MonoBehaviour
 
             case "PlayerTwo":
 
-                _frisbee.transform.SetParent(PlayerTwo.transform);
-                PlayerTwoCaught = true;
-                _frisbee.transform.localPosition = new Vector2(0.0f, 0.0f);
-                rigidbody2D.velocity = new Vector2(0, 0);
-                _playerOneScript.special = false;
-                _playerOneScript.bezierFlight = false;
+
+                this.gameObject.GetComponent<PhotonView>().RPC("ParentSetPlayerTwo", PhotonTargets.All);
 
                 break;
 
@@ -233,5 +231,20 @@ public class OnlineFrisbee : Photon.MonoBehaviour
         }
     }*/
 
+    [RPC]
+    private void ParentSetPlayerOne()
+    {
+        this.transform.SetParent(PlayerOne.transform);
+    }
 
+    [RPC]
+    private void ParentSetPlayerTwo()
+    {
+        //_frisbee.transform.SetParent(PlayerTwo.transform);
+        PlayerTwoCaught = true;
+       // _frisbee.transform.localPosition = new Vector2(0.0f, -0.2f);
+        rigidbody2D.velocity = new Vector2(0, 0);
+        _playerOneScript.special = false;
+        _playerOneScript.bezierFlight = false;
+    }
 }

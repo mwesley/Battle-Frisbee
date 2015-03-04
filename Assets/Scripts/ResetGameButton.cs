@@ -4,11 +4,20 @@ using System.Collections;
 public class ResetGameButton : MonoBehaviour
 {
 
+    public GameObject _selection;
+    public GameObject _canvas;
+    
+
     // Use this for initialization
     void Start()
     {
         //Screen.lockCursor = true;
-
+        if (Application.loadedLevelName == "MPStart")
+        {
+            _selection = GameObject.FindWithTag("SelectionScreen");
+            _selection.SetActive(false);
+            _canvas = GameObject.Find("Canvas1");
+        }
     }
 
     // Update is called once per frame
@@ -41,5 +50,11 @@ public class ResetGameButton : MonoBehaviour
     public void ControlButton()
     {
         Application.LoadLevel("ControlScreen");
+    }
+
+    public void FindGameButton()
+    {
+        _canvas.SetActive(false);
+        _selection.SetActive(true);
     }
 }

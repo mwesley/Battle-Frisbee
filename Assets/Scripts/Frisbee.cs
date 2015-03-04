@@ -100,11 +100,9 @@ public class Frisbee : MonoBehaviour
 
         if (PlayerControls.bezierFlight || AI.bezierFlight || PlayerControls.special)
         {
-            if (col.gameObject.tag == "Wall" && !SidleAlongWall.sidle)
-            {
-                rigidbody2D.velocity = -transform.position.normalized * 15;
-            }
-            else if (col.gameObject.tag == "Wall" && SidleAlongWall.sidle)
+            rigidbody2D.velocity = -transform.position.normalized * 15;
+            PlayerControls.special = false;
+            if (col.gameObject.tag == "Wall" && SidleAlongWall.sidle)
             {
                 rigidbody2D.velocity = new Vector2(20, 0);
                 PlayerControls.special = false;
