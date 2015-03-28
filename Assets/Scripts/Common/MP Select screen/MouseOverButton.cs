@@ -15,7 +15,7 @@ public class MouseOverButton : MonoBehaviour
     void Start()
     {
         FrisbeeOne = GameObject.FindWithTag("FrisbeeP1").GetComponent<MPSelectScreenFrisbee>();
-        //FrisbeeTwo = GameObject.FindWithTag("FrisbeeP2").GetComponent<MPSelectScreenFrisbee>();
+        FrisbeeTwo = GameObject.FindWithTag("FrisbeeP2").GetComponent<MPSelectScreenFrisbee>();
     }
 
     // Update is called once per frame

@@ -87,7 +87,7 @@ public class MPScoring : MonoBehaviour
 
         FrisbeeScript.PlayerOne.rigidbody2D.MovePosition(new Vector2(-9, 0));
         FrisbeeScript.PlayerTwo.rigidbody2D.MovePosition(new Vector2(9, 0));
-        _frisbee.rigidbody2D.MovePosition(new Vector2(0, 0));
+        _frisbee.rigidbody2D.transform.position = Vector2.zero;
         _frisbee.rigidbody2D.velocity = Vector2.zero;
         
         reset = true;

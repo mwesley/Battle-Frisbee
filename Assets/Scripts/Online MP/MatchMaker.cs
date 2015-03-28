@@ -127,13 +127,13 @@ public class MatchMaker : MonoBehaviour
 
     void OnJoinedLobby()
     {
-        PhotonNetwork.JoinRandomRoom();
+        //PhotonNetwork.JoinRandomRoom();
     }
 
     void OnPhotonRandomJoinFailed()
     {
         Debug.Log("Can't join random room!");
-        PhotonNetwork.CreateRoom(null);
+        //PhotonNetwork.CreateRoom(null);
     }
 
     void OnJoinedRoom()

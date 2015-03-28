@@ -13,22 +13,22 @@ public class SawtoothPlayerOne : MultiplayerPlayerOne
     void Start()
     {
         _time = 0f;
-        _ySpeed = 2.5f;
+        _ySpeed = 10f;
         frisbee = GameObject.FindWithTag("frisbee");
         powerBar = GameObject.FindWithTag("PowerBar");
     }
 
     private void SawtoothSkill()
     {
-        if ((_time * _ySpeed) % 2f >= 1)
+        if ((_time) % 2f >= 1)
         {
             _yFactor = 1;
         }
-        else if ((_time * _ySpeed) % 2f < 1)
+        else if ((_time) % 2f < 1)
         {
             _yFactor = -1;
         }
-        _y = (_yFactor * 10);
+        _y = (_yFactor * _ySpeed);
         _x = (powerValue / 5f);
 
         if (this.tag == "PlayerTwo")

@@ -31,8 +31,8 @@ public class PlayerSelections : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
-        if (Application.loadedLevelName == "MPCourt")
+
+        if (Application.loadedLevelName == "Court 1-1" || Application.loadedLevelName == "Court 1-2" || Application.loadedLevelName == "Court 1-3")
         {
             _frisbee = Instantiate(frisbee, new Vector2(0, 0), Quaternion.identity) as GameObject;
             InstantiatePlayerOne();
@@ -52,7 +52,7 @@ public class PlayerSelections : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Application.loadedLevelName != "MPCourt")
+        if (Application.loadedLevelName != "Court 1-1" || Application.loadedLevelName != "Court 1-2" || Application.loadedLevelName != "Court 1-3")
         {
             _playerOneAbility = Player1.SelectedFloat;
             _playerTwoAbility = Player2.SelectedFloat;
@@ -60,7 +60,20 @@ public class PlayerSelections : MonoBehaviour
             {
                 if (_playerOneAbility != 0 && _playerTwoAbility != 0)
                 {
-                    Application.LoadLevel("MPCourt");
+                    int level = Random.Range(1, 3);
+                    Debug.Log(level);
+                    switch (level)
+                    {
+                        case 1:
+                            Application.LoadLevel("Court 1-1");
+                            break;
+                        case 2:
+                            Application.LoadLevel("Court 1-2");
+                            break;
+                        case 3:
+                            Application.LoadLevel("Court 1-3");
+                            break;
+                    }
                 }
             }
         }
@@ -144,7 +157,8 @@ public class PlayerSelections : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 2)
+        Debug.Log(level);
+        if (level == 2 || level == 3 || level == 4)
         {
             _frisbee = Instantiate(frisbee, new Vector2(0, 0), Quaternion.identity) as GameObject;
             InstantiatePlayerOne();

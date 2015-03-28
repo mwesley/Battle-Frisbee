@@ -1,4 +1,4 @@
-﻿/* Taken from http://wiki.unity3d.com/index.php?title=KeyCombo
+﻿/* Adapted from http://wiki.unity3d.com/index.php?title=KeyCombo
  */
 using UnityEngine;
 public class KeyCombo
