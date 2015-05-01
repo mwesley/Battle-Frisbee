@@ -27,10 +27,15 @@ public class MPFrisbee : MonoBehaviour
     private MultiplayerPlayerOne _playerOneScript;
     private MultiplayerPlayerTwo _playerTwoScript;
 
+    public Transform dustEffect;
+    private GameObject dust;
+
     // Use this for initialization
     void Start()
     {
-        frisbeeVelocity = new Vector2(-5.0f, 0f);
+        StartCoroutine(DestroyDustLeftovers());
+
+        frisbeeVelocity = new Vector2(-5.0f, 50f);
         rigidbody2D.AddForce(frisbeeVelocity);
 
         PlayerOne = GameObject.FindWithTag("PlayerOne");
@@ -50,7 +55,19 @@ public class MPFrisbee : MonoBehaviour
         _playerTwoScript = PlayerTwo.GetComponent<MultiplayerPlayerTwo>();
     }
 
-
+    IEnumerator DestroyDustLeftovers()
+    {
+        while (true)
+        {
+            GameObject[] dustEffects = GameObject.FindGameObjectsWithTag("Dust");
+            foreach (GameObject dustEffect in dustEffects)
+            {
+                Debug.Log("Test");
+                Destroy(dustEffect);
+            }
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -153,6 +170,12 @@ public class MPFrisbee : MonoBehaviour
                 break;
 
         }
+        foreach (ContactPoint2D contact in col.contacts)
+        {
+            print(contact.collider.name + " hit " + contact.otherCollider.name);
+            DustEffect(contact.point);
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
     }
 
     void Score(string player)
@@ -173,6 +196,11 @@ public class MPFrisbee : MonoBehaviour
 
                 break;
         }
+    }
+
+    void DustEffect(Vector2 contactPoint)
+    {
+        dust = Instantiate(dustEffect, contactPoint, Quaternion.identity) as GameObject;
     }
 
 
