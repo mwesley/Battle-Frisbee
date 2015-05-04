@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NetworkPlayer" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEwAAAAAACAAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\NetworkPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MultiplayerPlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oIAAISAAggAAgqAADAEigIgIEBQAQRAgpVUIAwAxAEA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\MultiplayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MultiplayerPlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oIAAISAAAgAAgoAADAEigIgIEBQCQRAopUUIAwAxAEA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\MultiplayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CirclePlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAMACAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\CirclePlayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CirclePlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAMACAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\CirclePlayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalSinPlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAIACQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\DigitalSinPlayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DigitalSinPlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAIACQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\DigitalSinPlayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatchMaker" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQAEAAABCBCAAQAAAQAAAAAABAAAAFJEAKAAOAAREA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\MatchMaker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OnlineFrisbee" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADQAAAAACmgGIAAAAAAAAAAIAAAABAAgCAIgAwAABBA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\OnlineFrisbee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SawtoothPlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACQgAAAAAAgAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SawtoothPlayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SawtoothPlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACQgAAAAAAgAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SawtoothPlayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SidlePlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACQoAAAAAAAAAAAAAAACAAAABAAAAgAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SidlePlayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SidlePlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACQoAAAAAAAAAAAAAAACAAAABAAAAgAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SidlePlayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SinWavePlayerOnline" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACSgAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SinWavePlayerOnline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SinWavePlayerOnlineTwo" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIACSgAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Online MP\SinWavePlayerOnlineTwo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

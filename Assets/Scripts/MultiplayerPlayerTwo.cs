@@ -103,7 +103,7 @@ public class MultiplayerPlayerTwo : MonoBehaviour
         //powerValue -= 0.01f;
 
     }
-
+    
     protected void Throw()
     {
 

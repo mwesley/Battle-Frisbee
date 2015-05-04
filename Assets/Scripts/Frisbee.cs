@@ -24,10 +24,16 @@ public class Frisbee : MonoBehaviour
 
     private GameObject _wall;
 
+    public Transform dustEffect;
+    private GameObject dust;
+
+
     // Use this for initialization
     void Start()
     {
-        frisbeeVelocity = new Vector2(-5.0f, 0f);
+        StartCoroutine(DestroyDustLeftovers());
+
+        frisbeeVelocity = new Vector2(-5.0f, 5f);
         rigidbody2D.AddForce(frisbeeVelocity);
 
         playerCharacter = GameObject.FindWithTag("Player");
@@ -43,7 +49,19 @@ public class Frisbee : MonoBehaviour
         _wall = GameObject.FindGameObjectWithTag("Wall");
     }
 
-
+    IEnumerator DestroyDustLeftovers()
+    {
+        while (true)
+        {
+            GameObject[] dustEffects = GameObject.FindGameObjectsWithTag("Dust");      
+            foreach (GameObject dustEffect in dustEffects)
+            {
+                Debug.Log("Test");
+                Destroy(dustEffect);
+            }
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -73,6 +91,8 @@ public class Frisbee : MonoBehaviour
             ScoreScript.playerTwoWin = true;
         }
 
+
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -100,11 +120,9 @@ public class Frisbee : MonoBehaviour
 
         if (PlayerControls.bezierFlight || AI.bezierFlight || PlayerControls.special)
         {
-            if (col.gameObject.tag == "Wall" && !SidleAlongWall.sidle)
-            {
-                rigidbody2D.velocity = -transform.position.normalized * 15;
-            }
-            else if (col.gameObject.tag == "Wall" && SidleAlongWall.sidle)
+            rigidbody2D.velocity = -transform.position.normalized * 15;
+            PlayerControls.special = false;
+            if (col.gameObject.tag == "Wall" && SidleAlongWall.sidle)
             {
                 rigidbody2D.velocity = new Vector2(20, 0);
                 PlayerControls.special = false;
@@ -149,7 +167,21 @@ public class Frisbee : MonoBehaviour
         PlayerControls.bezierFlight = false;
         AI.bezierFlight = false;
         AI.dashing = false;
+
+        foreach (ContactPoint2D contact in col.contacts)
+        {
+            print(contact.collider.name + " hit " + contact.otherCollider.name);
+            DustEffect(contact.point);
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
     }
+
+    void DustEffect(Vector2 contactPoint)
+    {
+        dust = Instantiate(dustEffect, contactPoint, Quaternion.identity) as GameObject;
+    }
+
+
 
 
 
