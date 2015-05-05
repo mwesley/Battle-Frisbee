@@ -52,6 +52,8 @@ public class PlayerSelections : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         if (Application.loadedLevelName != "Court 1-1" || Application.loadedLevelName != "Court 1-2" || Application.loadedLevelName != "Court 1-3")
         {
             _playerOneAbility = Player1.SelectedFloat;
@@ -60,7 +62,7 @@ public class PlayerSelections : MonoBehaviour
             {
                 if (_playerOneAbility != 0 && _playerTwoAbility != 0)
                 {
-                    int level = Random.Range(1, 3);
+                    int level = Random.Range(1, 4);
                     Debug.Log(level);
                     switch (level)
                     {
@@ -158,7 +160,7 @@ public class PlayerSelections : MonoBehaviour
     void OnLevelWasLoaded(int level)
     {
         Debug.Log(level);
-        if (level == 2 || level == 3 || level == 4)
+        if (level != 3)
         {
             _frisbee = Instantiate(frisbee, new Vector2(0, 0), Quaternion.identity) as GameObject;
             InstantiatePlayerOne();
