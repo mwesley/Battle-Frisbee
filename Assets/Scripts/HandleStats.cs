@@ -19,7 +19,7 @@ public class HandleStats : MonoBehaviour
 
     void OnLevelWasLoaded(int level)
     {
-        if (level == 1)
+        if (level == 4)
         {
             TextArray = GameObject.Find("Canvas1").GetComponentsInChildren<Text>();            
             Wins = TextArray[0];

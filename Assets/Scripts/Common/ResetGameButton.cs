@@ -57,4 +57,9 @@ public class ResetGameButton : MonoBehaviour
         _canvas.SetActive(false);
         _selection.SetActive(true);
     }
+
+    public void OnlineMPButton()
+    {
+        Application.LoadLevel("LoginScreen");
+    }
 }

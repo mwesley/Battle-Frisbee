@@ -35,7 +35,7 @@ public class MPFrisbee : MonoBehaviour
     {
         StartCoroutine(DestroyDustLeftovers());
 
-        frisbeeVelocity = new Vector2(-5.0f, 50f);
+        frisbeeVelocity = new Vector2(-5.0f, 5.0f);
         rigidbody2D.AddForce(frisbeeVelocity);
 
         PlayerOne = GameObject.FindWithTag("PlayerOne");
@@ -100,6 +100,7 @@ public class MPFrisbee : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= 2f)
             {
+                frisbeeVelocity = -frisbeeVelocity;
                 _frisbee.rigidbody2D.AddForce(frisbeeVelocity);
                 timer = 0f;
                 _scoreScript.reset = false;

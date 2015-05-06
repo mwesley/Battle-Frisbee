@@ -71,6 +71,7 @@ public class Frisbee : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= 2f)
             {
+                frisbeeVelocity = -frisbeeVelocity;
                 frisbee.rigidbody2D.AddForce(frisbeeVelocity);
                 ScoreScript.reset = false;
                 timer = 0f;
@@ -170,9 +171,7 @@ public class Frisbee : MonoBehaviour
 
         foreach (ContactPoint2D contact in col.contacts)
         {
-            print(contact.collider.name + " hit " + contact.otherCollider.name);
             DustEffect(contact.point);
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
         }
     }
 
